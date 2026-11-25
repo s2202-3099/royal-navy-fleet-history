@@ -1,13 +1,17 @@
 <title>Royal Navy 1793–1982</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="イギリス海軍の艦艇数と兵員数を、帆船時代から1982年のフォークランド紛争まで時代ごとの分類で追う図表。数字ごとに出典つき。">
+<meta property="og:title" content="Royal Navy 1793–1982">
+<meta property="og:description" content="イギリス海軍の艦艇数と兵員数の推移、1793〜1982年。数字ごとに出典つき。">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Shippori+Mincho:wght@400;600;700&display=swap">
 <style>
-/* Layout: admiralty ledger — era tabs → scrollable date strip → bars + dossier side panel → trend chart. Dark navy-and-brass by default, Admiralty-chart paper in light. */
+/* Layout: admiralty ledger — view tabs → date strip → bars + dossier → trend; overview, rivals and data table as further views. Dark navy-and-brass by default, Admiralty-chart paper in light. */
 :root{
   --bg:#070a12; --bg2:#0b101c; --panel:#0e1424; --line:#1d2742; --line2:#2a3658;
   --ink:#dbe3f0; --muted:#97a4c0; --faint:#66739a;
-  --gold:#c9a24a; --gold-hi:#e8c97c; --ember:#dd8a4c; --signal:#e0675a;
+  --gold:#c9a24a; --gold-hi:#e8c97c; --ember:#dd8a4c; --signal:#e0675a; --sea:#6f93c4;
   --good:#6cba78; --warn:#cdb655; --bad:#e0675a;
   --glow:rgba(201,162,74,.07);
   --f-display:'Cinzel','Shippori Mincho',Georgia,serif;
@@ -19,7 +23,7 @@
   :root:not([data-theme="dark"]){
     --bg:#eef1f4; --bg2:#e4e9ef; --panel:#f7f9fb; --line:#cfd7e2; --line2:#b6c1d1;
     --ink:#17223a; --muted:#46557a; --faint:#6f7c9a;
-    --gold:#8a6716; --gold-hi:#6e5010; --ember:#a9561e; --signal:#b2372b;
+    --gold:#8a6716; --gold-hi:#6e5010; --ember:#a9561e; --signal:#b2372b; --sea:#2f5d96;
     --good:#2f7a3e; --warn:#836f12; --bad:#b2372b;
     --glow:rgba(138,103,22,.06);
     color-scheme:light;
@@ -28,7 +32,7 @@
 :root[data-theme="light"]{
   --bg:#eef1f4; --bg2:#e4e9ef; --panel:#f7f9fb; --line:#cfd7e2; --line2:#b6c1d1;
   --ink:#17223a; --muted:#46557a; --faint:#6f7c9a;
-  --gold:#8a6716; --gold-hi:#6e5010; --ember:#a9561e; --signal:#b2372b;
+  --gold:#8a6716; --gold-hi:#6e5010; --ember:#a9561e; --signal:#b2372b; --sea:#2f5d96;
   --good:#2f7a3e; --warn:#836f12; --bad:#b2372b;
   --glow:rgba(138,103,22,.06);
   color-scheme:light;
@@ -39,26 +43,24 @@ body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1
   background-image:radial-gradient(ellipse 70% 40% at 20% -10%,var(--glow),transparent 60%);}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 24px}
 button{font:inherit;color:inherit}
+a{color:var(--gold-hi);text-decoration-thickness:1px;text-underline-offset:2px}
 :focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
 
-/* Header */
 header{padding-block:32px 22px;display:grid;gap:6px;border-bottom:1px solid var(--line)}
-.eyebrow{font-family:var(--f-display);font-size:11px;letter-spacing:.32em;color:var(--gold);text-transform:uppercase}
 h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,5vw,46px);letter-spacing:.06em;line-height:1.1;margin:0;text-wrap:balance}
 h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:var(--muted);margin-top:6px}
 .lede{font-size:15px;color:var(--muted);max-width:62ch;margin:4px 0 0}
 
-/* Era tabs */
-.eras{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+.eras{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
 .eras::-webkit-scrollbar{display:none}
-.era{flex:1 0 auto;min-width:118px;background:none;border:0;border-bottom:3px solid transparent;padding:14px 10px 10px;cursor:pointer;text-align:center;color:var(--muted);transition:color .2s,border-color .2s}
+.era{flex:1 0 auto;min-width:104px;background:none;border:0;border-bottom:3px solid transparent;padding:14px 10px 10px;cursor:pointer;text-align:center;color:var(--muted);transition:color .2s,border-color .2s}
 .era b{display:block;font-family:var(--f-jp);font-weight:700;font-size:15px;letter-spacing:.08em}
 .era span{display:block;font-family:var(--f-display);font-size:11px;letter-spacing:.12em;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
 .era:hover{color:var(--ink)}
 .era[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--era-c,var(--gold))}
 .era[aria-selected="true"] span{color:var(--era-c,var(--gold))}
+.era.aux b{font-weight:600}
 
-/* Date strip */
 .strip{display:flex;align-items:stretch;gap:6px;border-bottom:1px solid var(--line);padding-block:8px}
 .step{flex:0 0 36px;background:var(--panel);border:1px solid var(--line);border-radius:4px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
 .step:hover:not(:disabled){color:var(--ink);border-color:var(--line2)}
@@ -69,19 +71,19 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .date span{display:block;font-family:var(--f-jp);font-size:11px;color:var(--faint);white-space:nowrap}
 .date:hover{color:var(--ink);background:var(--bg2)}
 .date.sp b{color:var(--signal)}
+.date.part b::after{content:'*';color:var(--faint);margin-left:1px}
 .date[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--era-c,var(--gold));background:var(--bg2)}
 .date[aria-pressed="true"] span{color:var(--era-c,var(--gold))}
 
 .caveat{font-size:14px;color:var(--muted);font-style:italic;padding:10px 2px;border-bottom:1px solid var(--line);margin:0}
 .caveat::before{content:'※ ';font-style:normal;color:var(--era-c,var(--gold))}
 
-/* Main */
 .main{display:grid;grid-template-columns:minmax(0,1fr) 340px;border-bottom:1px solid var(--line)}
 @media (max-width:820px){.main{grid-template-columns:minmax(0,1fr)}.side{border-left:0!important;border-top:1px solid var(--line)}}
 .bars{padding:22px 18px 18px 0;min-width:0}
 @media (max-width:820px){.bars{padding-right:0}}
 .ph{font-family:var(--f-jp);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--muted);margin:0 0 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.ph em{font-family:var(--f-jp);font-style:normal;letter-spacing:.05em;text-transform:none}
+.ph em{font-style:normal;font-weight:400;color:var(--faint)}
 .rows{display:grid;gap:9px}
 .row{display:grid;grid-template-columns:132px minmax(0,1fr) 82px;align-items:center;gap:10px}
 @media (max-width:480px){.row{grid-template-columns:96px minmax(0,1fr) 64px}}
@@ -89,20 +91,22 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .rl b{display:block;font-family:var(--f-jp);font-weight:600;font-size:13px;color:var(--ink)}
 .rl i{display:block;font-size:11.5px;color:var(--faint)}
 .track{position:relative;height:26px;background:var(--bg2);border:1px solid var(--line);border-radius:2px}
+.track.unk{background:repeating-linear-gradient(135deg,var(--bg2) 0 6px,var(--line) 6px 7px)}
 .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:1px;transition:width .55s cubic-bezier(.4,0,.2,1)}
 .fill::after{content:'';position:absolute;inset:0 0 55% 0;background:rgba(255,255,255,.1)}
+.fill.min{mask-image:linear-gradient(90deg,#000 80%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent)}
 .prev{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;transition:left .55s cubic-bezier(.4,0,.2,1)}
 .rv{font-family:var(--f-display);font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;line-height:1.15}
 .rv small{display:block;font-family:var(--f-body);font-weight:400;font-size:11.5px;color:var(--faint)}
-.rv.zero{color:var(--faint)}
+.rv.zero,.rv.unk{color:var(--faint)}
 .key{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-size:12.5px;color:var(--muted)}
 .key span{display:inline-flex;align-items:center;gap:6px}
 .key i{display:inline-block;width:2px;height:13px;background:var(--ink);opacity:.55}
+.key s{display:inline-block;width:18px;height:11px;background:repeating-linear-gradient(135deg,var(--bg2) 0 4px,var(--line2) 4px 5px);border:1px solid var(--line)}
 
-/* Side */
 .side{border-left:1px solid var(--line);padding:22px 0 18px 18px;display:grid;gap:16px;align-content:start;min-width:0}
 @media (max-width:820px){.side{padding-left:0}}
-.badge{display:inline-block;font-family:var(--f-display);font-size:10.5px;letter-spacing:.14em;padding:2px 8px;border:1px solid var(--line2);color:var(--muted)}
+.badge{display:inline-block;font-family:var(--f-jp);font-size:11.5px;letter-spacing:.06em;padding:1px 8px;border:1px solid var(--line2);color:var(--muted)}
 .badge.sp{border-color:var(--signal);color:var(--signal)}
 .yhero{display:grid;gap:4px}
 .ynum{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,48px);line-height:1;letter-spacing:.03em;color:var(--era-c,var(--gold));font-variant-numeric:tabular-nums}
@@ -113,31 +117,35 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .tile{background:var(--panel);padding:10px 8px;text-align:center}
 .tile b{display:block;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.05;font-variant-numeric:tabular-nums}
 .tile span{display:block;font-family:var(--f-jp);font-size:11.5px;color:var(--faint);margin-top:3px}
-.delta{font-family:var(--f-display);font-size:12.5px;text-align:center;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.delta{font-family:var(--f-jp);font-size:12.5px;text-align:center;margin-top:4px;font-variant-numeric:tabular-nums}
 .delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.flat{color:var(--faint)}
 .sh{font-family:var(--f-jp);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--muted);margin:0 0 6px}
-.ships{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.ships{display:grid;margin:0;padding:0;list-style:none}
 .ships li{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:8px;padding:6px 0;border-bottom:1px solid var(--line);line-height:1.4}
 .ships li:last-child{border-bottom:0}
-.ships b{font-family:var(--f-display);font-weight:600;font-size:12.5px;color:var(--gold-hi)}
+.ships a{font-family:var(--f-display);font-weight:600;font-size:12.5px;color:var(--gold-hi);text-decoration:none}
+.ships a:hover{text-decoration:underline}
 .ships span{font-size:13.5px;color:var(--muted)}
 .acc{display:inline-block;font-family:var(--f-jp);font-size:11.5px;padding:1px 8px;border:1px solid;margin-bottom:6px}
 .acc.high{color:var(--good)} .acc.mid{color:var(--warn)} .acc.low{color:var(--bad)}
 .notes{font-size:14px;color:var(--muted);margin:0}
+.srcs{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:13px;color:var(--muted);line-height:1.45}
+.chk{display:inline-block;font-family:var(--f-jp);font-size:10.5px;padding:0 6px;border:1px solid var(--line2);color:var(--faint);margin-right:6px;white-space:nowrap;vertical-align:1px}
+.chk.page{border-color:var(--good);color:var(--good)}
+.chk.search{border-color:var(--warn);color:var(--warn)}
 
-/* Trend */
-.trend,.overview{padding-block:22px 6px;border-bottom:1px solid var(--line)}
+.trend,.overview,.rivals,.table{padding-block:22px 6px;border-bottom:1px solid var(--line)}
 .th{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
-.th h2{font-family:var(--f-jp);font-weight:600;font-size:14px;letter-spacing:.06em;color:var(--ink);margin:0}
+.th h2{font-family:var(--f-jp);font-weight:600;font-size:15px;letter-spacing:.06em;color:var(--ink);margin:0}
 .th p{font-size:13px;color:var(--faint);font-style:italic;margin:0}
 .cv{position:relative}
 canvas{display:block;width:100%;touch-action:pan-y;cursor:pointer}
-.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line2);padding:6px 10px;font-size:13px;line-height:1.45;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25);transform:translate(-50%,calc(-100% - 12px))}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line2);padding:6px 10px;font-size:13px;line-height:1.45;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25);transform:translate(-50%,calc(-100% - 12px));z-index:2}
 .tip b{font-family:var(--f-display);color:var(--ink)}
 .tip span{color:var(--muted)}
 .hint{font-size:12.5px;color:var(--faint);margin:6px 0 0}
+.sub2{margin-top:26px}
 
-/* Overview summaries */
 .sums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:16px}
 @media (max-width:760px){.sums{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .sum{background:var(--panel);padding:12px;border:0;text-align:left;cursor:pointer;display:grid;gap:4px;border-top:3px solid var(--c)}
@@ -147,7 +155,45 @@ canvas{display:block;width:100%;touch-action:pan-y;cursor:pointer}
 .sum dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:4px 0 0;font-size:13px}
 .sum dt{color:var(--faint)} .sum dd{margin:0;font-family:var(--f-display);font-variant-numeric:tabular-nums;text-align:right}
 
-footer{padding-block:18px 8px;font-size:13px;color:var(--faint);font-style:italic;line-height:1.8}
+/* Rivals */
+.rv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+@media (max-width:820px){.rv-grid{grid-template-columns:minmax(0,1fr)}}
+.rc h3{font-family:var(--f-jp);font-size:15px;font-weight:700;margin:0 0 10px}
+.rrow{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:4px 10px;align-items:center;margin-bottom:10px}
+.rrow .n{font-family:var(--f-jp);font-size:13.5px;text-align:right;color:var(--muted)}
+.rrow.uk .n{color:var(--ink);font-weight:700}
+.rbar{position:relative;height:22px;background:var(--bg2);border:1px solid var(--line)}
+.rbar i{position:absolute;inset:0 auto 0 0;background:var(--sea);opacity:.75}
+.rrow.uk .rbar i{background:var(--gold);opacity:1}
+.rbar em{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-style:normal;font-family:var(--f-display);font-size:13px;font-variant-numeric:tabular-nums}
+.rrow small{grid-column:2;font-size:12px;color:var(--faint);margin-top:-4px}
+.rnote{font-size:14px;color:var(--muted);margin:6px 0 4px}
+.rsrc{font-size:12.5px;color:var(--faint);margin:0}
+.rnotes{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.rnotes li{display:grid;grid-template-columns:4.5em minmax(0,1fr);gap:12px;padding-top:12px;border-top:1px solid var(--line)}
+.rnotes b{font-family:var(--f-display);font-size:18px;color:var(--gold)}
+.rnotes p{margin:0;font-size:14.5px}
+.rnotes .rsrc{margin-top:4px}
+
+/* Table */
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chip{background:var(--panel);border:1px solid var(--line);padding:5px 12px;cursor:pointer;font-family:var(--f-jp);font-size:13.5px;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--gold);color:var(--ink)}
+.btn{background:var(--gold);color:var(--bg);border:0;padding:6px 14px;cursor:pointer;font-family:var(--f-jp);font-weight:600;font-size:13.5px;margin-left:auto}
+.status{font-size:13px;color:var(--good);min-width:8em}
+.tscroll{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-family:var(--f-jp);font-weight:600;color:var(--muted);background:var(--bg2);position:sticky;top:0}
+td:first-child,th:first-child{text-align:left}
+td.src,th.src{text-align:left;white-space:normal;min-width:24em;color:var(--muted);font-size:12.5px}
+tr.part td:first-child::after{content:' *';color:var(--faint)}
+.legend{font-size:13px;color:var(--faint);margin:10px 0 0}
+#csvBox{width:100%;height:9em;margin-top:10px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;background:var(--bg2);color:var(--ink);border:1px solid var(--line)}
+.srclist{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:13.5px;color:var(--muted)}
+
+.err{padding:24px;border:1px solid var(--bad);color:var(--bad);margin:24px 0;font-size:15px}
+footer{padding-block:18px 8px;font-size:13px;color:var(--faint);line-height:1.8}
 footer p{margin:0 0 4px}
 
 @media (prefers-reduced-motion:reduce){.fill,.prev{transition:none}}
@@ -156,32 +202,30 @@ footer p{margin:0 0 4px}
 <div class="wrap">
 <header>
   <h1>ROYAL NAVY<small>イギリス海軍 艦艇数推移 1793〜1982年</small></h1>
-  <p class="lede">帆船時代から移行期、近代海軍、戦後縮小まで189年分の艦艇数を、時代ごとの分類のまま並べています。年を選ぶと内訳と代表艦が出ます。← → キーでも年を移れます。</p>
+  <p class="lede">帆船時代から戦後縮小まで189年分の艦艇数を、時代ごとの分類のまま並べています。年を選ぶと内訳・代表艦・出典が出ます。← → キーでも年を移れます。</p>
 </header>
 
-<nav class="eras" id="eras" role="tablist" aria-label="時代"></nav>
+<nav class="eras" id="eras" role="tablist" aria-label="表示"></nav>
 
-<div id="eraView">
+<div id="eraView" hidden>
   <div class="strip">
     <button class="step" id="prevBtn" aria-label="前の時点">‹</button>
     <div class="dates" id="dates"></div>
     <button class="step" id="nextBtn" aria-label="次の時点">›</button>
   </div>
   <p class="caveat" id="caveat"></p>
-
   <section class="main">
     <div class="bars">
-      <h2 class="ph"><span id="barTitle">等級別艦艇数</span><em id="barScale"></em></h2>
+      <h2 class="ph"><span id="barTitle"></span><em id="barScale"></em></h2>
       <div class="rows" id="rows"></div>
-      <div class="key"><span><i></i>縦線＝前の時点の数</span><span>％＝総数に占める割合</span></div>
+      <div class="key"><span><i></i>縦線＝前の時点の数</span><span>％＝判明分の合計に占める割合</span><span><s></s>出典で確かめられなかった値</span></div>
     </div>
     <aside class="side" id="side"></aside>
   </section>
-
   <section class="trend">
-    <div class="th"><h2 id="trTitle">推移</h2><p id="trSub"></p></div>
+    <div class="th"><h2 id="trTitle"></h2><p id="trSub"></p></div>
     <div class="cv"><canvas id="trendCv" height="220" aria-label="時代内の総艦艇数推移グラフ"></canvas><div class="tip" id="trendTip" hidden></div></div>
-    <p class="hint">点をクリックするとその時点に移ります。</p>
+    <p class="hint">点をクリックするとその時点に移ります。白抜きの点は一部の艦種が不明な時点で、判明分の合計（下限）の位置に置いています。</p>
   </section>
 </div>
 
@@ -189,373 +233,338 @@ footer p{margin:0 0 4px}
   <section class="overview">
     <div class="th"><h2>全期間の総艦艇数（1793–1982）</h2><p>時代ごとに数え方が違うため、線は時代の境目で切っています</p></div>
     <div class="cv"><canvas id="ovCv" height="300" aria-label="全期間の総艦艇数推移グラフ"></canvas><div class="tip" id="ovTip" hidden></div></div>
-    <p class="hint">実線＝総数、破線＝その時代の主力艦（戦列艦→装甲艦→戦艦・巡洋戦艦→空母）。点をクリックすると該当の時代と時点に移ります。</p>
+    <p class="hint">実線＝総数、破線＝その時代の主力艦（戦列艦→装甲艦→戦艦・巡洋戦艦→空母）。白抜きの点＝一部不明（下限）、ひし形＝就役中の主要艦だけを数えた別の指標。点をクリックすると該当の時点に移ります。</p>
+    <div class="th sub2"><h2>兵員数（1793–1982）</h2><p id="pnote"></p></div>
+    <div class="cv"><canvas id="peCv" height="200" aria-label="兵員数の推移グラフ"></canvas><div class="tip" id="peTip" hidden></div></div>
+    <p class="hint">艦艇数と違って、兵員数は時代をまたいで同じ物差しで比べられます。ただし定員と実数、海兵隊を含むかどうかは資料ごとに違い、点に触れると何を数えた数字かが出ます。</p>
     <div class="sums" id="sums"></div>
   </section>
 </div>
 
+<div id="rvView" hidden>
+  <section class="rivals">
+    <div class="th"><h2>他国の海軍との比較</h2><p>出典で揃えて比べられた時点だけを載せています</p></div>
+    <div class="rv-grid" id="rvCharts"></div>
+    <ul class="rnotes" id="rvNotes"></ul>
+  </section>
+</div>
+
+<div id="tbView" hidden>
+  <section class="table">
+    <div class="th"><h2>データ表と出典</h2><p>表の数字は data.json と同じものです</p></div>
+    <div class="tools" id="tbTools"></div>
+    <div class="tscroll"><table id="tbl"></table></div>
+    <p class="legend">* は一部の艦種が不明な時点。「—」は出典で確かめられなかった値、「≥」は下限値。</p>
+    <textarea id="csvBox" hidden readonly aria-label="CSV"></textarea>
+    <div class="th sub2"><h2>出典一覧</h2></div>
+    <ul class="srclist" id="srcList"></ul>
+  </section>
+</div>
+
+<div id="loadErr" class="err" hidden></div>
+
 <footer>
-  <p>帆船時代：Naval Chronicle、Steele's Navy List、N.A.M. Rodger <i>The Command of the Ocean</i> 等。</p>
-  <p>移行期：同上＋Conway's All the World's Fighting Ships（1860–1905）。精度±20〜25%。</p>
-  <p>近代・戦後：Conway's All the World's Fighting Ships、Jane's Fighting Ships 各年版、公刊戦史等。</p>
-  <p>帆船時代は就役中＋予備役を含み、近代以降は就役艦のみ。分類基準が時代で異なるため、時代をまたぐ比較は傾向を見る程度にとどめてください。</p>
+  <p>確認の度合い：<span class="chk page">原文確認</span>ページ本文で数字を確かめたもの　<span class="chk search">要約経由</span>検索結果の要約で確かめ、原文は未読のもの　<span class="chk">未整理</span>元データのまま、数字と文献の対応が付いていないもの。</p>
+  <p>帆船時代は就役中＋予備役を含み、近代以降は就役艦のみ。分類基準が時代で異なるため、時代をまたぐ艦艇数の比較は傾向を見る程度にとどめてください。</p>
 </footer>
 </div>
 
 <script>
-/* ═════════ DATA ═════════ */
-const SAIL_CATS=[
-  {key:'r1',label:'一等戦列艦',sub:'100門以上',color:'#e0b85c'},
-  {key:'r2',label:'二等戦列艦',sub:'90〜98門',color:'#c08a45'},
-  {key:'r3',label:'三等戦列艦',sub:'64〜80門',color:'#6f93c4'},
-  {key:'r4',label:'四等艦',sub:'50〜60門',color:'#4f9a86'},
-  {key:'r5',label:'五等フリゲート',sub:'32〜44門',color:'#3f78b8'},
-  {key:'r6',label:'六等艦',sub:'20〜28門',color:'#8a74b8'},
-  {key:'rx',label:'等外艦',sub:'スループ・砲艦等',color:'#8a8fa3'},
-];
-const SAIL={
-  '1793':{sl:'対仏開戦',era:'対仏開戦',ctx:'フランス革命政府に宣戦布告（2月1日）。平時体制から急速な戦時動員開始。アメリカ独立戦争後の縮小艦隊が再膨張する起点。',acc:'mid',r1:5,r2:18,r3:78,r4:10,r5:88,r6:42,rx:210,notable:[{n:'HMS Victory',d:'100門一等・後にトラファルガーでネルソン旗艦'},{n:'HMS Agamemnon',d:'64門三等・ネルソンが最愛と呼んだ艦'},{n:'HMS Queen Charlotte',d:'100門一等・ハウ提督旗艦（栄光の6月1日）'}],notes:'対仏開戦直後。多くの艦が予備役から再就役する段階。等外艦数の精度は±25%。'},
-  '1805':{sl:'トラファルガー',era:'トラファルガー',ctx:'10月21日トラファルガー海戦。ネルソン提督戦死・仏西連合艦隊壊滅。帆船時代の英海軍が制海権を決定的に確立した年。',acc:'high',r1:9,r2:22,r3:112,r4:8,r5:144,r6:58,rx:320,notable:[{n:'HMS Victory',d:'100門一等・ネルソン旗艦・現在ポーツマス保存'},{n:'HMS Temeraire',d:'98門二等・ターナーの名画「戦闘艦テメレール」'},{n:'HMS Bellerophon',d:'74門三等・トラファルガー参加・後にナポレオン降伏受理'},{n:'HMS Royal Sovereign',d:'100門一等・コリングウッド提督旗艦'}],notes:'帆船時代の英海軍戦力のほぼ頂点。三等74門艦が112隻と圧倒的多数。五等フリゲート144隻は通商保護・封鎖任務の拡大を反映。'},
-  '1815':{sl:'ナポレオン終結',era:'ナポレオン戦争終結',ctx:'ワーテルロー（6月18日）・ナポレオン最終的敗北。戦時最大規模から急速な平時縮小が始まる歴史的転換点。',acc:'high',r1:12,r2:26,r3:130,r4:6,r5:152,r6:64,rx:480,notable:[{n:'HMS Caledonia',d:'120門一等・当時最大級戦列艦'},{n:'HMS Bellerophon',d:'74門三等・7月15日ナポレオン降伏を受理'},{n:'HMS Northumberland',d:'74門三等・ナポレオンをセント・ヘレナへ移送'},{n:'HMS Victory',d:'100門一等・ポーツマスに係留・以後実戦なし'}],notes:'帆船時代の英海軍絶対的ピーク。戦列艦168隻・フリゲート216隻・等外480隻。この直後から急速な軍縮が始まる。'},
-  '1850':{sl:'蒸気移行期',era:'蒸気移行期前夜',ctx:'パクス・ブリタニカ全盛。蒸気スクリュー艦が実用化されつつある過渡期。木造帆船から鉄製蒸気艦への技術革命の断面。等級制が崩れ始める。',acc:'mid',r1:8,r2:14,r3:72,r4:4,r5:88,r6:35,rx:280,notable:[{n:'HMS Duke of Wellington',d:'131門一等・最後期の大型帆走戦列艦（1852年進水時にスクリュー化）'},{n:'HMS Agamemnon（II）',d:'91門二等・最初期のスクリュー推進戦列艦（1852年進水）'},{n:'HMS Rattler',d:'スループ・スクリュー推進実験艦・アレクト号との綱引き（1845年）'}],notes:'ナポレオン戦争後の大幅縮小後の安定期。蒸気機関採用で「等級」の意味が変化。'},
-};
-
-const TRANS_CATS=[
-  {key:'t1',label:'装甲艦',sub:'Ironclad・鉄製／装甲板装備',color:'#d4703a'},
-  {key:'t2',label:'木造蒸気戦列艦',sub:'帆走戦列艦を蒸気改装',color:'#a98450'},
-  {key:'t3',label:'木造蒸気フリゲート',sub:'蒸気フリゲート・コルベット',color:'#6f9a6a'},
-  {key:'t4',label:'旧式帆走艦',sub:'籍を残す予備艦',color:'#4d7a5a'},
-  {key:'t5',label:'小型艦',sub:'砲艦・スループ・水雷艇等',color:'#8a8fa3'},
-];
-const TRANS={
-  '1860':{sl:'装甲艦の幕開け',era:'装甲艦時代の幕開け',ctx:'HMS ウォリアー（1861年就役）建造中。フランスのグロワール（1860年）が世界初の外洋装甲艦として就役。木造帆走艦が主力だが技術革命の前夜。',acc:'low',t1:4,t2:38,t3:52,t4:180,t5:180,notable:[{n:'HMS Warrior（建造中）',d:'世界初の鉄製船体の外洋装甲艦・1861年就役'},{n:'HMS Black Prince',d:'ウォリアー同型・1862年就役'},{n:'HMS Agamemnon（II）',d:'スクリュー推進戦列艦・大西洋電信ケーブル敷設に従事'}],notes:'装甲艦はまだ4隻程度。主力は依然として木造蒸気戦列艦と木造蒸気フリゲート。旧式帆走艦が多数籍を残す。精度±25%。'},
-  '1870':{sl:'装甲艦整備期',era:'装甲艦整備期',ctx:'普仏戦争（1870〜71年）。装甲艦の建造が加速するが、砲塔艦・砲郭艦・バーベット艦が乱立し設計思想が混乱している時期。',acc:'low',t1:28,t2:18,t3:38,t4:90,t5:200,notable:[{n:'HMS Monarch',d:'砲塔装甲艦・1869年就役・大西洋横断実証'},{n:'HMS Captain',d:'砲塔装甲艦・1870年転覆沈没・設計欠陥の象徴'},{n:'HMS Devastation',d:'砲塔装甲艦・1873年就役・帆装なし・近代戦艦の原型'}],notes:'HMS キャプテンの転覆沈没（1870年）が装甲艦設計の欠陥を露呈。木造蒸気艦が急速に減少。水雷艇の登場（1870年代）で小型艦の性格が変化。精度±22%。'},
-  '1880':{sl:'前弩級前夜',era:'前弩級確立前夜',ctx:'魚雷への恐怖が艦隊設計を支配。技術的混乱がピークを超えて収束しつつある段階。1880年代後半にHMS コリングウッド（1887年）が就役し前弩級戦艦の時代が始まる。',acc:'mid',t1:58,t2:5,t3:22,t4:30,t5:240,notable:[{n:'HMS Inflexible',d:'中央砲郭装甲艦・1881年就役・16インチ砲・最重装甲'},{n:'HMS Collingwood',d:'バーベット艦・1880年起工、1887年就役・前弩級戦艦の原型'},{n:'HMS Lightning',d:'英海軍初の水雷艇（1877年）・この時代の象徴'}],notes:'装甲艦が主力として確立。木造蒸気戦列艦はほぼ消滅。水雷艇が急増し小型艦の性格を変える。精度±20%。'},
-};
-
-const MOD_CATS=[
-  {key:'bb',label:'戦艦・巡洋戦艦',sub:'',color:'#c9a84c'},
-  {key:'cv',label:'空母',sub:'',color:'#e07030'},
-  {key:'ca',label:'重巡洋艦',sub:'',color:'#7a9ac0'},
-  {key:'cl',label:'軽巡洋艦',sub:'',color:'#3a9a88'},
-  {key:'dd',label:'駆逐艦',sub:'',color:'#3f78b8'},
-  {key:'ss',label:'潜水艦',sub:'',color:'#8a6ac0'},
-  {key:'ot',label:'その他',sub:'コルベット・砲艦等',color:'#8a8380'},
-];
-const MOD={
-  '1895':{sl:'前弩級期',era:'前弩級戦艦期',dt:'std',ctx:'前弩級戦艦の頂点期。二国標準主義の全盛。チャンネル艦隊・地中海艦隊に世界最大の艦隊を展開。',acc:'low',bb:44,cv:0,ca:0,cl:38,dd:60,ss:0,ot:120,notable:[{n:'HMS Majestic',d:'前弩級戦艦・マジェスティック級主力'},{n:'HMS Powerful',d:'防護巡洋艦・当時最大級'}],notes:'前弩級戦艦44隻は当時の世界最大。フィッシャー改革前夜。精度±20%。'},
-  '1904':{sl:'前弩級ピーク',era:'前弩級ピーク',dt:'std',ctx:'日英同盟（1902年）後。フィッシャー改革開始（1904年）。前弩級戦艦の絶対的ピーク。ドレッドノート就役（1906年）の直前。',acc:'low',bb:52,cv:0,ca:0,cl:42,dd:115,ss:8,ot:140,notable:[{n:'HMS Formidable',d:'前弩級戦艦・後にUボートに撃沈（1915年）'},{n:'HMS Good Hope',d:'装甲巡洋艦・コロネル沖で喪失（1914年）'}],notes:'前弩級戦艦のピーク。フィッシャーによる大規模廃艦整理の直前。精度±20%。'},
-  '1914':{sl:'WWI開戦',era:'第一次大戦開戦',dt:'std',ctx:'ドレッドノート以降の英独建艦競争の帰結。8月に第一次世界大戦開戦。弩級艦時代の英海軍がほぼ頂点に達した段階。',acc:'mid',bb:49,cv:0,ca:12,cl:52,dd:225,ss:74,ot:180,notable:[{n:'HMS Iron Duke',d:'超弩級戦艦・ジェリコー提督旗艦'},{n:'HMS Lion',d:'巡洋戦艦・ビーティ提督旗艦'},{n:'HMS Invincible',d:'巡洋戦艦・インヴィンシブル級一番艦'}],notes:'弩級・超弩級29隻＋巡洋戦艦9隻＋前弩級残存。'},
-  '1925':{sl:'条約後',era:'ワシントン条約後',dt:'std',ctx:'ワシントン条約（1922年）後の整理完了期。スカパ・フローでのドイツ艦隊自沈（1919年）後。',acc:'high',bb:20,cv:6,ca:14,cl:45,dd:185,ss:55,ot:120,notable:[{n:'HMS Hood',d:'巡洋戦艦・世界最大の戦闘艦（1941年撃沈まで）'},{n:'HMS Hermes',d:'最初から空母として設計された艦の一つ（1924年就役）'}],notes:'条約により主力艦を大量廃棄。初期空母が就役。'},
-  '1931':{sl:'ロンドン条約',era:'ロンドン条約期',dt:'std',ctx:'ロンドン海軍軍縮条約（1930年）。世界恐慌で海軍予算が圧迫。',acc:'high',bb:15,cv:6,ca:18,cl:50,dd:165,ss:52,ot:100,notable:[{n:'HMS Nelson',d:'条約型戦艦・ネルソン・ロドニー体制'},{n:'HMS Suffolk',d:'カウンティ級重巡'}],notes:'ネルソン・ロドニーが主力。カウンティ級重巡が充実。'},
-  '1936':{sl:'再軍備',era:'再軍備開始',dt:'std',ctx:'ロンドン条約失効（1936年）・再軍備開始。スペイン内戦。ドイツの再軍備加速。',acc:'high',bb:15,cv:7,ca:18,cl:52,dd:168,ss:55,ot:105,notable:[{n:'HMS Ark Royal',d:'空母・建造中（1938年就役）'},{n:'HMS King George V',d:'KGV級戦艦・1937年起工'},{n:'HMS Hood',d:'巡洋戦艦・主力'}],notes:'KGV級の起工直前。イラストリアス級装甲空母の起工前夜。'},
-  '1939':{lb:'1939/1/1',sl:'開戦前年',era:'第二次大戦前年',dt:'std',ctx:'第二次世界大戦開戦の年の年初。再軍備が加速。KGV級・イラストリアス級が建造中。',acc:'high',bb:15,cv:7,ca:18,cl:58,dd:185,ss:58,ot:115,notable:[{n:'HMS Nelson/Rodney',d:'条約型戦艦・主力'},{n:'HMS Ark Royal',d:'空母・就役済み（1938年）'},{n:'HMS Warspite',d:'QE級戦艦'}],notes:'9月の開戦時（1939/9/3）と比べると、開戦までの8か月の増強が分かる。'},
-  '1939-09':{lb:'1939/9/3',sl:'開戦',era:'第二次大戦開戦',dt:'special',ctx:'ドイツへの宣戦布告。第二次世界大戦開戦。チャーチルが海軍大臣に復帰。同日、客船アセニア号がUボートに撃沈される。',acc:'high',bb:15,cv:7,ca:18,cl:58,dd:189,ss:60,ot:118,notable:[{n:'HMS Courageous',d:'空母・9月17日Uボートに撃沈（乗員519名戦死）'},{n:'HMS Royal Oak',d:'戦艦・10月14日スカパ・フローで撃沈'},{n:'HMS Ajax',d:'軽巡・12月ラプラタ沖海戦参加'}],notes:'開戦時点でのほぼリアルタイム戦力。'},
-  '1941-01':{lb:'1941/1/1',sl:'対独戦継続',era:'対独戦継続中',dt:'std',ctx:'バトル・オブ・ブリテン終結後。地中海・北アフリカ戦線。ビスマルク追撃戦（5月）の前。',acc:'high',bb:13,cv:6,ca:16,cl:55,dd:198,ss:62,ot:280,notable:[{n:'HMS Prince of Wales',d:'KGV級戦艦・5月ビスマルク追撃・12月マレー沖で撃沈'},{n:'HMS Illustrious',d:'装甲空母・タラント空襲実施（1940年11月）'}],notes:'HMS ロイヤル・オーク、コレイジャス喪失後。コルベット等の護衛艦艇が急増。'},
-  '1941-12':{lb:'1941/12/7',sl:'太平洋戦争前夜',era:'太平洋戦争前夜',dt:'special',ctx:'真珠湾攻撃の前日（現地時間）。翌日から日米英が太平洋戦争に突入。10日にはプリンス・オブ・ウェールズとレパルスがマレー沖で撃沈される。',acc:'high',bb:13,cv:6,ca:16,cl:54,dd:196,ss:64,ot:310,notable:[{n:'HMS Prince of Wales',d:'シンガポール展開中・10日撃沈'},{n:'HMS Repulse',d:'巡洋戦艦・10日マレー沖で撃沈'}],notes:'フッド喪失（5月）・バーラム喪失（11月）・アーク・ロイヤル喪失（11月）後。'},
-  '1942':{lb:'1942/1/1',sl:'太平洋戦争初期',era:'太平洋戦争初期',dt:'std',ctx:'太平洋戦線拡大。北アフリカ戦線継続。Uボート戦が最も激しい時期へ。',acc:'high',bb:12,cv:5,ca:15,cl:52,dd:202,ss:66,ot:380,notable:[{n:'HMS Duke of York',d:'KGV級戦艦・後に北岬沖でシャルンホルスト撃沈'},{n:'HMS Eagle',d:'空母・8月ペデスタル作戦でUボートに撃沈'}],notes:'プリンス・オブ・ウェールズ、レパルス、アーク・ロイヤル喪失後。護衛艦艇の急増が顕著。'},
-  '1943':{lb:'1943/1/1',sl:'Uボート戦転換前',era:'Uボート戦転換前',dt:'std',ctx:'北アフリカ作戦終結（5月）。Uボート戦の転換点（「暗黒の5月」）。イタリア上陸（9月）。',acc:'high',bb:12,cv:8,ca:14,cl:54,dd:218,ss:72,ot:480,notable:[{n:'HMS Indomitable',d:'装甲空母・地中海作戦主力'},{n:'HMS Belfast',d:'軽巡・北岬沖海戦参加（12月）'}],notes:'イラストリアス級装甲空母が充実。護衛空母と護衛艦艇が激増。'},
-  '1944':{lb:'1944/1/1',sl:'ノルマンディー前',era:'ノルマンディー前夜',dt:'std',ctx:'ノルマンディー上陸作戦（6月）。太平洋への主力転用開始。Uボートの脅威は低下しつつある。',acc:'high',bb:14,cv:18,ca:14,cl:58,dd:235,ss:78,ot:530,notable:[{n:'HMS Warspite',d:'戦艦・ノルマンディー艦砲射撃'},{n:'HMS Duke of York',d:'戦艦・1943年12月26日シャルンホルスト撃沈'}],notes:'護衛空母の大量就役で空母数が増大。英太平洋艦隊（BPF）編成へ。'},
-  '1945-05':{lb:'1945/5/8',sl:'VE-Day',era:'対独終戦',dt:'special',ctx:'VE-Day・対独終戦。ドイツ降伏。Uボート戦完全終結。艦隊主力が太平洋に集中し始める。',acc:'high',bb:14,cv:20,ca:13,cl:55,dd:230,ss:80,ot:490,notable:[{n:'HMS King George V',d:'戦艦・BPF参加・7月日本本土艦砲射撃'},{n:'HMS Indomitable',d:'装甲空母・BPF参加'}],notes:'対独終戦時点。護衛任務艦艇が太平洋転用または退役開始。'},
-  '1945-08':{lb:'1945/8/15',sl:'対日終戦',era:'終戦',dt:'special',ctx:'日本の降伏・終戦。BPFが太平洋で作戦継続中に終戦を迎える。大英帝国最後の総力戦の終わり。',acc:'high',bb:13,cv:18,ca:12,cl:52,dd:218,ss:76,ot:450,notable:[{n:'HMS Duke of York',d:'戦艦・東京湾の降伏調印式に英代表艦として参列'},{n:'HMS Formidable',d:'装甲空母・特攻機の命中を装甲甲板で耐えた'}],notes:'VE-Day以降の退役・廃艦開始で総数は減少。BPFの装甲空母が主力。'},
-};
-
-const PW_CATS=[
-  {key:'bb',label:'戦艦',sub:'残存大型水上戦闘艦',color:'#c9a84c'},
-  {key:'cv',label:'空母',sub:'正規空母・軽空母',color:'#e07030'},
-  {key:'cr',label:'巡洋艦',sub:'重巡・軽巡残存',color:'#7a9ac0'},
-  {key:'dd',label:'駆逐艦',sub:'従来型・ミサイル駆逐艦',color:'#3f78b8'},
-  {key:'ff',label:'フリゲート',sub:'対潜護衛フリゲート',color:'#3a9a88'},
-  {key:'ss',label:'潜水艦（通常）',sub:'ディーゼル潜水艦',color:'#8a6ac0'},
-  {key:'sn',label:'潜水艦（原子力）',sub:'SSN・SSBN',color:'#c0508a'},
-  {key:'ot',label:'その他',sub:'掃海艇・哨戒艇等',color:'#8a8fa3'},
-];
-const PW={
-  '1950':{sl:'朝鮮戦争',era:'朝鮮戦争期',dt:'std',ctx:'朝鮮戦争勃発（6月25日）。NATO成立（1949年）後の再軍備期。終戦後の急速縮小が一段落し、冷戦体制への移行が始まる。',acc:'high',bb:4,cv:8,cr:30,dd:100,ff:20,ss:50,sn:0,ot:180,notable:[{n:'HMS Vanguard',d:'最後の英国戦艦・1946年就役・1960年解体'},{n:'HMS Triumph',d:'軽空母・朝鮮戦争初期の航空支援'},{n:'HMS Belfast',d:'軽巡・朝鮮戦争で砲撃支援'}],notes:'終戦後5年で総数が半分以下に縮小。戦艦は4隻のみ。フリゲートが独立艦種として確立しつつある。'},
-  '1956':{sl:'スエズ危機',era:'スエズ危機',dt:'std',ctx:'スエズ危機（10〜11月）。英仏がナセルのスエズ運河国有化に対し軍事介入するも、米国の圧力で撤退。イギリスが単独では世界的な軍事力投射ができないことが露呈した転換点。',acc:'high',bb:2,cv:7,cr:22,dd:78,ff:45,ss:48,sn:0,ot:140,notable:[{n:'HMS Eagle',d:'正規空母・スエズ作戦に参加'},{n:'HMS Albion',d:'軽空母・スエズ作戦に参加'},{n:'HMS Vanguard',d:'戦艦・1956年から予備艦隊旗艦・1960年解体'}],notes:'スエズ危機で世界的な軍事力投射能力の限界が露呈。翌1957年のサンディーズ国防白書で大幅削減が決まる。'},
-  '1960':{sl:'サンディーズ後',era:'サンディーズ改革後',dt:'std',ctx:'1957年サンディーズ国防白書の影響が反映された時点。「核抑止が通常戦力に優先する」という論理で海軍を大幅削減。徴兵制廃止・空母削減・国防費削減が同時進行。',acc:'high',bb:0,cv:6,cr:15,dd:60,ff:55,ss:42,sn:1,ot:90,notable:[{n:'HMS Dreadnought',d:'英初の原子力潜水艦・1960年進水・1963年就役'},{n:'HMS Ark Royal',d:'正規空母・1955年就役・1979年退役'},{n:'HMS Hermes',d:'軽空母・1959年就役・後にフォークランドに参加'}],notes:'戦艦ゼロへ。原子力潜水艦の時代が始まる。フリゲートが主力艦種として台頭。'},
-  '1966':{sl:'空母廃止論争',era:'空母廃止論争',dt:'std',ctx:'ヒーリー国防相の下、1966年国防白書で新正規空母CVA-01の建造中止を決定。東スエズ撤退方針も打ち出される。',acc:'high',bb:0,cv:5,cr:10,dd:45,ff:65,ss:35,sn:4,ot:75,notable:[{n:'HMS Eagle',d:'正規空母・CVA-01中止の代替として延命改装'},{n:'HMS Hermes',d:'軽空母・この時点では攻撃空母（後にコマンドー空母、対潜空母へ改装）'},{n:'HMS Dreadnought',d:'原子力潜水艦・1963年就役・米国の機関技術供与'}],notes:'CVA-01中止は海軍に大きな衝撃を与え、第一海軍卿ルース大将と海軍担当相メイヒューが抗議の辞任をした。原子力潜水艦の拡充が本格化。'},
-  '1968':{sl:'東スエズ撤退',era:'東スエズ撤退宣言',dt:'std',ctx:'1968年1月「スエズ以東撤退」宣言。シンガポール・マレーシアの英軍基地を1971年までに閉鎖。インド洋・太平洋での恒常的プレゼンスを放棄し、NATOの北大西洋防衛へ集中。',acc:'high',bb:0,cv:4,cr:8,dd:38,ff:68,ss:32,sn:5,ot:65,notable:[{n:'HMS Eagle',d:'正規空母・1972年退役'},{n:'HMS Ark Royal',d:'正規空母・最後の正規空母として延命'},{n:'HMS Resolution',d:'弾道ミサイル原潜（SSBN）・1967年就役・英核抑止の柱'}],notes:'東スエズ撤退は帝国海軍の終わりを意味する。レゾリューション級SSBNが英国の核抑止を担う。'},
-  '1975':{sl:'削減後安定期',era:'削減後安定期',dt:'std',ctx:'石油ショック（1973年）後の財政緊縮。HMS アーク・ロイヤルが唯一の正規空母として延命運用中。NATO防衛に特化した艦隊が形成された安定期。',acc:'high',bb:0,cv:2,cr:3,dd:25,ff:58,ss:18,sn:9,ot:50,notable:[{n:'HMS Ark Royal',d:'英最後の正規空母・1979年退役'},{n:'HMS Invincible',d:'インヴィンシブル級軽空母（STOVL）・建造中（1980年就役）'},{n:'HMS Spartan',d:'スウィフトシュア級SSN・建造中'}],notes:'後継のインヴィンシブル級（STOVL軽空母）が建造中。原子力潜水艦が着実に増加。'},
-  '1982-04':{lb:'1982/4/2',sl:'フォークランド開戦',era:'フォークランド紛争開戦',dt:'special',ctx:'アルゼンチン軍がフォークランド諸島に侵攻（4月2日）。英国は機動部隊を急遽編成し南大西洋へ派遣。縮小を重ねた英海軍が真価を問われた瞬間。',acc:'high',bb:0,cv:3,cr:2,dd:14,ff:42,ss:15,sn:10,ot:40,notable:[{n:'HMS Hermes',d:'機動部隊旗艦・シーハリアー搭載'},{n:'HMS Invincible',d:'インヴィンシブル級軽空母・シーハリアー搭載'},{n:'HMS Conqueror',d:'SSN・アルゼンチン巡洋艦ベルグラーノ撃沈（5月2日）'}],notes:'派遣された機動部隊はほぼ現有戦力の全力。空母2隻・駆逐艦とフリゲート計20隻超・補給艦多数。シーハリアーが航空優勢を確保。'},
-  '1982-06':{lb:'1982/6/14',sl:'紛争終結',era:'フォークランド紛争終結',dt:'special',ctx:'アルゼンチン軍の降伏・紛争終結（6月14日）。74日間の紛争。英国は駆逐艦2・フリゲート2などを喪失したが、作戦は成功し主権を回復した。',acc:'high',bb:0,cv:3,cr:2,dd:10,ff:40,ss:15,sn:10,ot:38,notable:[{n:'HMS Sheffield',d:'駆逐艦・エグゾセ対艦ミサイルで被弾し沈没（5月）・現代戦の教訓'},{n:'HMS Coventry',d:'駆逐艦・爆弾で撃沈（5月25日）'},{n:'HMS Ardent / Antelope',d:'フリゲート2隻喪失'}],notes:'紛争中の喪失：駆逐艦シェフィールド・コヴェントリー、フリゲートのアーデント・アンテロープ、揚陸艦サー・ガラハッド、コンテナ船アトランティック・コンベアー等。エグゾセの脅威が露呈。'},
-};
-
-/* ═════════ ERA CONFIG ═════════ */
-const sum=(d,cats)=>cats.reduce((a,c)=>a+d[c.key],0);
-const ERAS={
-  sail:{id:'sail',hash:'sail',name:'帆船時代',en:'Sailing Era',range:'1793–1850',cvar:'--gold',cats:SAIL_CATS,data:SAIL,keys:['1793','1805','1815','1850'],
-    barTitle:'等級別艦艇数',badge:()=>'年次概数',
-    caveat:'帆船時代は就役中の艦に加え、予備役（係留中の艦）も数に含めています。',
-    tiles:d=>[[sum(d,SAIL_CATS),'総艦艇数'],[d.r1+d.r2+d.r3,'戦列艦（一〜三等）'],[d.r5+d.r6,'フリゲート・六等'],[d.rx,'等外艦']],
-    sub:d=>d.r1+d.r2+d.r3, subLabel:'戦列艦（一〜三等）'},
-  trans:{id:'trans',hash:'transition',name:'移行期',en:'Transition Era',range:'1860–1880',cvar:'--ember',cats:TRANS_CATS,data:TRANS,keys:['1860','1870','1880'],
-    barTitle:'艦種別艦艇数（移行期独自分類）',badge:()=>'年次概数',
-    caveat:'移行期は帆船の等級制も近代の艦種分類も当てはまらないため、独自の分類を使っています。精度±20〜25%。前後の時代との直接比較には特に注意してください。',
-    tiles:d=>[[sum(d,TRANS_CATS),'総艦艇数'],[d.t1,'装甲艦'],[d.t2+d.t3,'木造蒸気艦'],[d.t5,'小型艦']],
-    sub:d=>d.t1, subLabel:'装甲艦'},
-  mod:{id:'mod',hash:'modern',name:'近代海軍',en:'Modern Navy',range:'1895–1945',cvar:'--gold',cats:MOD_CATS,data:MOD,keys:['1895','1904','1914','1925','1931','1936','1939','1939-09','1941-01','1941-12','1942','1943','1944','1945-05','1945-08'],
-    barTitle:'艦種別保有数',badge:d=>d.dt==='special'?'★ 特定日時点':'1月1日時点',
-    caveat:'近代以降は就役艦のみを数えています。赤い日付は開戦・終戦などの特定日の時点です。',
-    tiles:d=>[[sum(d,MOD_CATS),'総艦艇数'],[d.bb,'戦艦・巡洋戦艦'],[d.cv,'空母'],[d.dd,'駆逐艦']],
-    sub:d=>d.bb, subLabel:'戦艦・巡洋戦艦'},
-  pw:{id:'pw',hash:'postwar',name:'戦後縮小',en:'Post-War',range:'1950–1982',cvar:'--signal',cats:PW_CATS,data:PW,keys:['1950','1956','1960','1966','1968','1975','1982-04','1982-06'],
-    barTitle:'艦種別保有数',badge:d=>d.dt==='special'?'★ 特定日時点':'1月1日時点',
-    caveat:'',
-    tiles:d=>{const t=sum(d,PW_CATS),b=sum(PW['1950'],PW_CATS);return [[t,'総艦艇数'],[Math.round(t/b*100)+'%','1950年比',t/b<.4?'--bad':t/b<.7?'--warn':'--good'],[d.cv,'空母'],[d.ff,'フリゲート']];},
-    sub:d=>d.cv, subLabel:'空母'},
-};
-const ORDER=['sail','trans','mod','pw'];
-{ // post-war caveat computed from the data, so the text never disagrees with the numbers
-  const a=sum(MOD['1945-08'],MOD_CATS), b=sum(PW['1982-06'],PW_CATS);
-  ERAS.pw.caveat=`戦後縮小期は朝鮮戦争の1950年からフォークランド紛争終結（1982年6月）まで。終戦時の約${a}隻から1982年には約${b}隻へ、およそ${Math.round(a/b)}分の1に縮小しました。数の減少と同時に、帝国の海軍からNATOの対潜海軍へと役割そのものが変わった時代です。`;
-}
-const keyLabel=(era,k)=>ERAS[era].data[k].lb||k;
-const decYear=k=>{const [y,m]=k.split('-');return +y+(m?(+m-.5)/12:0)};
-
-/* ═════════ STATE ═════════ */
-const state={era:'sail',sel:{sail:'1805',trans:'1870',mod:'1939-09',pw:'1982-04'}};
+/* ═════════ HELPERS ═════════ */
 const $=id=>document.getElementById(id);
 const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const alpha=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`;};
+const decYear=k=>{const [y,m]=String(k).split('-');return +y+(m?(+m-.5)/12:0)};
+const fmtN=v=>v==null?'—':v.toLocaleString('en-US');
+const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-/* ═════════ ERA TABS ═════════ */
-function buildEraTabs(){
-  const nav=$('eras');
-  const items=[...ORDER.map(e=>({id:e,name:ERAS[e].name,range:ERAS[e].range,cvar:ERAS[e].cvar})),{id:'all',name:'全期間概観',range:'1793–1982',cvar:'--gold'}];
-  nav.innerHTML=items.map(it=>`<button class="era" role="tab" id="tab-${it.id}" data-era="${it.id}" style="--era-c:var(${it.cvar})" aria-selected="false"><b>${it.name}</b><span>${it.range}</span></button>`).join('');
-  nav.addEventListener('click',e=>{const b=e.target.closest('.era');if(b) go(b.dataset.era);});
+let D,ERA={},ORDER=[];
+// Per-era summary rules: tiles on the dossier and the "main ship" sub-series
+const add=(d,...ks)=>ks.some(k=>d[k]==null)?null:ks.reduce((a,k)=>a+d[k],0);
+const RULES={
+  sail:{bar:'等級別艦艇数',badge:()=>'年次概数',sub:d=>add(d,'r1','r2','r3'),subLabel:'戦列艦（一〜三等）',
+    tiles:(d,t)=>[[t,'総艦艇数'],[add(d,'r1','r2','r3'),'戦列艦（一〜三等）'],[add(d,'r5','r6'),'フリゲート・六等'],[d.rx,'等外艦']]},
+  trans:{bar:'艦種別艦艇数（移行期独自分類）',badge:()=>'年次概数',sub:d=>d.t1,subLabel:'装甲艦',
+    tiles:(d,t)=>[[t,'総艦艇数'],[d.t1,'装甲艦'],[add(d,'t2','t3'),'木造蒸気艦'],[d.t5,'小型艦']]},
+  mod:{bar:'艦種別保有数',badge:d=>d.dt==='special'?'★ 特定日時点':'1月1日時点',sub:d=>d.bb,subLabel:'戦艦・巡洋戦艦',
+    tiles:(d,t)=>[[t,'総艦艇数'],[d.bb,'戦艦・巡洋戦艦'],[d.cv,'空母'],[d.dd,'駆逐艦']]},
+  pw:{bar:'艦種別保有数',badge:d=>d.dt==='special'?'★ 特定日時点':'1月1日時点',sub:d=>d.cv,subLabel:'空母',
+    tiles:(d,t,E)=>{const b=total(E.points['1950'],E.cats).v;const r=t.v/b;return [[t,'総艦艇数'],[{v:Math.round(r*100)+'%'},'1950年比',r<.4?'--bad':r<.7?'--warn':'--good'],[d.cv,'空母'],[d.ff,'フリゲート']];}},
+};
+// total of known values; partial when any value is unknown or a lower bound
+function total(d,cats){let v=0,part=false;cats.forEach(c=>{if(d[c.key]==null)part=true;else v+=d[c.key];});if(d.min&&d.min.length)part=true;return {v,part};}
+const totStr=t=>(t.part?'≥':'')+fmtN(t.v);
+const keyLabel=(e,k)=>ERA[e].points[k].lb||k;
+const isPart=(e,k)=>total(ERA[e].points[k],ERA[e].cats).part;
+
+/* ═════════ STATE & ROUTING ═════════ */
+const state={view:'sail',sel:{sail:'1805',trans:'1870',mod:'1939-09',pw:'1982-04'},tb:'mod'};
+const AUX=[{id:'all',name:'全期間概観',range:'1793–1982',hash:'overview'},{id:'rivals',name:'他国比較',range:'1805–1945',hash:'rivals'},{id:'table',name:'データ表',range:'出典つき',hash:'data'}];
+const hashOf=v=>ERA[v]?ERA[v].hash:AUX.find(a=>a.id===v).hash;
+
+function buildTabs(){
+  const items=[...ORDER.map(e=>({id:e,name:ERA[e].name,range:ERA[e].range,c:ERA[e].accent})),...AUX.map(a=>({...a,c:'--gold',aux:true}))];
+  $('eras').innerHTML=items.map(it=>`<button class="era${it.aux?' aux':''}" role="tab" data-v="${it.id}" style="--era-c:var(${it.c})" aria-selected="false"><b>${it.name}</b><span>${it.range}</span></button>`).join('');
+  $('eras').onclick=e=>{const b=e.target.closest('.era');if(b) go(b.dataset.v);};
 }
-
-function go(era,key,push=true){
-  state.era=era;
-  if(key&&ERAS[era]) state.sel[era]=key;
-  document.querySelectorAll('.era').forEach(b=>b.setAttribute('aria-selected',b.dataset.era===era));
-  const all=era==='all';
-  $('eraView').hidden=all; $('ovView').hidden=!all;
-  if(push){const h=all?'overview':ERAS[era].hash; if(location.hash!=='#'+h) history.replaceState(null,'','#'+h);}
-  if(all){renderOverview();renderSums();return;}
-  document.documentElement.style.setProperty('--era-c',`var(${ERAS[era].cvar})`);
-  $('caveat').textContent=ERAS[era].caveat;
+function go(view,key,push=true){
+  state.view=view; if(key&&ERA[view]) state.sel[view]=key;
+  document.querySelectorAll('.era').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===view));
+  $('eraView').hidden=!ERA[view]; $('ovView').hidden=view!=='all'; $('rvView').hidden=view!=='rivals'; $('tbView').hidden=view!=='table';
+  if(push){const h=hashOf(view); if(location.hash!=='#'+h) history.replaceState(null,'','#'+h);}
+  if(view==='all'){renderOverview();renderPersonnel();renderSums();return;}
+  if(view==='rivals'){renderRivals();return;}
+  if(view==='table'){renderTable();return;}
+  document.documentElement.style.setProperty('--era-c',`var(${ERA[view].accent})`);
+  $('caveat').textContent=ERA[view].caveat;
   buildDates(); render();
 }
 
-/* ═════════ DATE STRIP ═════════ */
+/* ═════════ ERA VIEW ═════════ */
 function buildDates(){
-  const E=ERAS[state.era], box=$('dates');
-  box.innerHTML=E.keys.map(k=>{const d=E.data[k];return `<button class="date${d.dt==='special'?' sp':''}" data-k="${k}" aria-pressed="false"><b>${esc(keyLabel(state.era,k))}</b><span>${esc(d.sl)}</span></button>`;}).join('');
-  box.onclick=e=>{const b=e.target.closest('.date');if(b) select(b.dataset.k);};
+  const e=state.view,E=ERA[e];
+  $('dates').innerHTML=E.order.map(k=>{const d=E.points[k];return `<button class="date${d.dt==='special'?' sp':''}${isPart(e,k)?' part':''}" data-k="${k}" aria-pressed="false"><b>${esc(keyLabel(e,k))}</b><span>${esc(d.sl)}</span></button>`;}).join('');
+  $('dates').onclick=ev=>{const b=ev.target.closest('.date');if(b) select(b.dataset.k);};
 }
-function select(k){state.sel[state.era]=k;render();}
+function select(k){state.sel[state.view]=k;render();}
 function step(n){
-  if(state.era==='all') return;
-  const E=ERAS[state.era],i=E.keys.indexOf(state.sel[state.era]),j=i+n;
-  if(j>=0&&j<E.keys.length) select(E.keys[j]);
+  if(!ERA[state.view]) return;
+  const E=ERA[state.view],i=E.order.indexOf(state.sel[state.view]),j=i+n;
+  if(j>=0&&j<E.order.length) select(E.order[j]);
 }
-
-/* ═════════ RENDER ═════════ */
+function srcHtml(ids){
+  return `<ul class="srcs">${ids.map(id=>{const s=D.sources[id];if(!s) return '';
+    const tag=s.checked==='page'?'<span class="chk page">原文確認</span>':s.checked==='search'?'<span class="chk search">要約経由</span>':'<span class="chk">未整理</span>';
+    return `<li>${tag}${s.url?`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`:esc(s.label)}${s.note?`<br><span>${esc(s.note)}</span>`:''}</li>`;}).join('')}</ul>`;
+}
 function render(){
-  const era=state.era,E=ERAS[era],k=state.sel[era],d=E.data[k],i=E.keys.indexOf(k);
-  const pk=i>0?E.keys[i-1]:null, pd=pk?E.data[pk]:null;
-  document.querySelectorAll('.date').forEach(b=>{const on=b.dataset.k===k;b.setAttribute('aria-pressed',on);if(on) b.scrollIntoView({block:'nearest',inline:'center',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});});
-  $('prevBtn').disabled=i===0; $('nextBtn').disabled=i===E.keys.length-1;
+  const e=state.view,E=ERA[e],R=RULES[e],k=state.sel[e],d=E.points[k],i=E.order.indexOf(k);
+  const pk=i>0?E.order[i-1]:null,pd=pk?E.points[pk]:null;
+  document.querySelectorAll('.date').forEach(b=>{const on=b.dataset.k===k;b.setAttribute('aria-pressed',on);if(on) b.scrollIntoView({block:'nearest',inline:'center',behavior:reduced()?'auto':'smooth'});});
+  $('prevBtn').disabled=i===0; $('nextBtn').disabled=i===E.order.length-1;
 
-  // Bars: one scale for the whole era so moving between dates shows real change
-  const maxV=Math.max(...E.keys.flatMap(kk=>E.cats.map(c=>E.data[kk][c.key])));
-  const tot=sum(d,E.cats);
-  $('barTitle').textContent=E.barTitle;
+  const maxV=Math.max(...E.order.flatMap(kk=>E.cats.map(c=>E.points[kk][c.key]??0)));
+  const t=total(d,E.cats);
+  $('barTitle').textContent=R.bar;
   $('barScale').textContent=`目盛り上限 ${maxV}隻（この時代の最大値）`;
   const rows=$('rows');
-  if(rows.dataset.era!==era){
-    rows.dataset.era=era;
+  if(rows.dataset.era!==e){
+    rows.dataset.era=e;
     rows.innerHTML=E.cats.map(c=>`<div class="row" data-c="${c.key}"><div class="rl"><b>${c.label}</b>${c.sub?`<i>${c.sub}</i>`:''}</div><div class="track"><div class="fill" style="background:${c.color}"></div><div class="prev" hidden></div></div><div class="rv"></div></div>`).join('');
   }
   E.cats.forEach(c=>{
-    const row=rows.querySelector(`[data-c="${c.key}"]`),v=d[c.key];
-    row.querySelector('.fill').style.width=(v/maxV*100)+'%';
-    const pv=row.querySelector('.prev');
-    if(pd){pv.hidden=false;pv.style.left=`calc(${pd[c.key]/maxV*100}% - 1px)`;pv.title=`${keyLabel(era,pk)}：${pd[c.key]}隻`;} else pv.hidden=true;
+    const row=rows.querySelector(`[data-c="${c.key}"]`),v=d[c.key],unk=v==null,mn=(d.min||[]).includes(c.key);
+    row.querySelector('.track').classList.toggle('unk',unk);
+    const f=row.querySelector('.fill'); f.style.width=unk?'0':(v/maxV*100)+'%'; f.classList.toggle('min',mn);
+    const pv=row.querySelector('.prev'),p=pd?pd[c.key]:null;
+    if(p!=null){pv.hidden=false;pv.style.left=`calc(${p/maxV*100}% - 1px)`;pv.title=`${keyLabel(e,pk)}：${p}隻`;} else pv.hidden=true;
     const rv=row.querySelector('.rv');
-    rv.className='rv'+(v===0?' zero':'');
-    rv.innerHTML=`${v}<small>${tot?Math.round(v/tot*100):0}%</small>`;
+    rv.className='rv'+(unk?' unk':v===0?' zero':'');
+    rv.innerHTML=unk?'—<small>不明</small>':`${mn?'≥':''}${v}<small>${t.v?Math.round(v/t.v*100):0}%</small>`;
   });
 
-  // Side dossier
-  const tiles=E.tiles(d);
   let delta='';
-  if(pd){const df=tot-sum(pd,E.cats),pct=Math.round(df/sum(pd,E.cats)*100);
-    delta=`<div class="delta ${df>0?'up':df<0?'down':'flat'}">${df>0?'+':''}${df}隻（${df>0?'+':''}${pct}%）／前の時点 ${esc(keyLabel(era,pk))} 比</div>`;}
+  if(pd){const pt=total(pd,E.cats);
+    if(t.part||pt.part) delta=`<div class="delta flat">この時点か前の時点（${esc(keyLabel(e,pk))}）に不明な値があるため、増減は出していません</div>`;
+    else{const df=t.v-pt.v,pct=Math.round(df/pt.v*100);delta=`<div class="delta ${df>0?'up':df<0?'down':'flat'}">${df>0?'+':''}${df}隻（${df>0?'+':''}${pct}%）／前の時点 ${esc(keyLabel(e,pk))} 比</div>`;}}
   const sp=d.dt==='special';
+  const tiles=R.tiles(d,t,E).map(([val,label,col])=>{const s=val==null?'—':typeof val==='object'?(val.part!==undefined?totStr(val):val.v):val;return `<div class="tile"><b${col?` style="color:var(${col})"`:''}>${s}</b><span>${label}</span></div>`;}).join('');
   const accT={high:'精度：高',mid:'精度：中',low:'精度：低'}[d.acc];
+  const wiki=n=>'https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(n.replace(/（.*?）/g,'').split('/')[0].trim());
   $('side').innerHTML=`
     <div class="yhero">
-      <div><span class="badge${sp?' sp':''}">${E.badge(d)}</span></div>
-      <div class="ynum${sp?' sp':''}">${esc(keyLabel(era,k))}</div>
+      <div><span class="badge${sp?' sp':''}">${R.badge(d)}</span></div>
+      <div class="ynum${sp?' sp':''}">${esc(keyLabel(e,k))}</div>
       <div class="yera">${esc(d.era)}</div>
       <p class="yctx">${esc(d.ctx)}</p>
     </div>
-    <div>
-      <div class="tiles">${tiles.map(t=>`<div class="tile"><b${t[2]?` style="color:var(${t[2]})"`:''}>${t[0]}</b><span>${t[1]}</span></div>`).join('')}</div>
-      ${delta}
-    </div>
-    <div><h3 class="sh">代表艦・出来事</h3><ul class="ships">${d.notable.map(n=>`<li><b>${esc(n.n)}</b><span>${esc(n.d)}</span></li>`).join('')}</ul></div>
-    <div><h3 class="sh">注記</h3><span class="acc ${d.acc}">${accT}</span><p class="notes">${esc(d.notes)}</p></div>`;
-
+    <div><div class="tiles">${tiles}</div>${delta}</div>
+    <div><h3 class="sh">代表艦・出来事</h3><ul class="ships">${d.notable.map(n=>`<li><a href="${wiki(n.n)}" target="_blank" rel="noopener">${esc(n.n)}</a><span>${esc(n.d)}</span></li>`).join('')}</ul></div>
+    <div><h3 class="sh">注記</h3><span class="acc ${d.acc}">${accT}</span><p class="notes">${esc(d.notes)}</p></div>
+    <div><h3 class="sh">出典</h3>${srcHtml(d.src||[])}</div>`;
   renderTrend();
 }
 
-/* ═════════ CANVAS HELPERS ═════════ */
+/* ═════════ CANVAS ═════════ */
 function setup(cv){
-  const dpr=window.devicePixelRatio||1, W=cv.parentElement.clientWidth||800, H=+cv.getAttribute('height');
-  cv.width=W*dpr; cv.height=H*dpr; cv.style.height=H+'px';
-  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
-  return {ctx,W,H};
+  const dpr=window.devicePixelRatio||1,W=cv.parentElement.clientWidth||800,H=+cv.getAttribute('height');
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);return {ctx,W,H};
 }
-function alpha(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`;}
-function grid(ctx,p,cw,ch,maxV){
+function grid(ctx,p,cw,ch,maxV,fmt=v=>v){
   const nice=v=>{const m=Math.pow(10,Math.floor(Math.log10(v)));const f=v/m;return (f<=1?1:f<=2?2:f<=5?5:10)*m;};
-  const stepV=nice(maxV/4), top=Math.ceil(maxV/stepV)*stepV;
-  ctx.font=`11px Cinzel, serif`; ctx.textAlign='right'; ctx.textBaseline='middle';
-  for(let v=0;v<=top+1e-9;v+=stepV){
-    const y=p.top+ch*(1-v/top);
-    ctx.strokeStyle=tok('--line'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.left,y); ctx.lineTo(p.left+cw,y); ctx.stroke();
-    ctx.fillStyle=tok('--faint'); ctx.fillText(v,p.left-6,y);
-  }
-  ctx.textBaseline='alphabetic';
-  return top;
+  const st=nice(maxV/4),top=Math.ceil(maxV/st)*st;
+  ctx.font='11px Cinzel, serif';ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let v=0;v<=top+1e-9;v+=st){const y=p.top+ch*(1-v/top);ctx.strokeStyle=tok('--line');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.left,y);ctx.lineTo(p.left+cw,y);ctx.stroke();ctx.fillStyle=tok('--faint');ctx.fillText(fmt(v),p.left-6,y);}
+  ctx.textBaseline='alphabetic';return top;
 }
-function showTip(tip,cv,x,y,html){
-  tip.innerHTML=html; tip.hidden=false;
-  const w=cv.clientWidth, tw=tip.offsetWidth;
-  tip.style.left=Math.min(Math.max(x,tw/2+4),w-tw/2-4)+'px'; tip.style.top=Math.max(y,tip.offsetHeight+16)+'px';
-}
+function showTip(tip,cv,x,y,html){tip.innerHTML=html;tip.hidden=false;const w=cv.clientWidth,tw=tip.offsetWidth;tip.style.left=Math.min(Math.max(x,tw/2+4),w-tw/2-4)+'px';tip.style.top=Math.max(y,tip.offsetHeight+16)+'px';}
+function dot(ctx,x,y,r,col,hollow){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);if(hollow){ctx.lineWidth=1.8;ctx.strokeStyle=col;ctx.fillStyle=tok('--bg');ctx.fill();ctx.stroke();}else{ctx.fillStyle=col;ctx.fill();}}
+// draw a polyline through the given points, breaking it wherever a value is null
+function polyline(ctx,pts,col,w,dash){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);ctx.beginPath();let on=false;pts.forEach(q=>{if(q.y==null){return;}on?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);on=true;});ctx.stroke();ctx.setLineDash([]);}
 
-/* ═════════ TREND (within era) ═════════ */
 let trendPts=[];
 function renderTrend(){
-  const era=state.era,E=ERAS[era],cv=$('trendCv');
-  const {ctx,W,H}=setup(cv);
-  const p={top:16,bottom:46,left:44,right:18}, cw=W-p.left-p.right, ch=H-p.top-p.bottom;
-  const keys=E.keys, tots=keys.map(k=>sum(E.data[k],E.cats)), subs=keys.map(k=>E.sub(E.data[k]));
-  const top=grid(ctx,p,cw,ch,Math.max(...tots));
-  const X=i=>p.left+(keys.length===1?cw/2:i/(keys.length-1)*cw), Y=v=>p.top+ch*(1-v/top);
+  const e=state.view,E=ERA[e],R=RULES[e],cv=$('trendCv'),{ctx,W,H}=setup(cv);
+  const p={top:16,bottom:46,left:44,right:18},cw=W-p.left-p.right,ch=H-p.top-p.bottom;
+  const keys=E.order,T=keys.map(k=>total(E.points[k],E.cats)),subs=keys.map(k=>R.sub(E.points[k]));
+  const top=grid(ctx,p,cw,ch,Math.max(...T.map(t=>t.v)));
+  const X=i=>p.left+(keys.length===1?cw/2:i/(keys.length-1)*cw),Y=v=>p.top+ch*(1-v/top);
   $('trTitle').textContent=`総艦艇数の推移（${E.range}）`;
-  $('trSub').textContent=`色帯＝内訳の積み上げ　破線＝${E.subLabel}`;
-
-  // special-date guides
-  keys.forEach((k,i)=>{if(E.data[k].dt==='special'){ctx.strokeStyle=alpha('#e0675a',.25);ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(X(i),p.top);ctx.lineTo(X(i),p.top+ch);ctx.stroke();ctx.setLineDash([]);}});
-  // stacked areas
+  $('trSub').textContent=`色帯＝内訳の積み上げ　破線＝${R.subLabel}`+(e==='pw'?'　点線＝原子力潜水艦':'');
+  keys.forEach((k,i)=>{if(E.points[k].dt==='special'){ctx.strokeStyle=alpha('#e0675a',.25);ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(X(i),p.top);ctx.lineTo(X(i),p.top+ch);ctx.stroke();ctx.setLineDash([]);}});
+  // stacked areas over complete points only
+  const full=keys.map((k,i)=>({k,i})).filter(o=>!T[o.i].part);
   for(let si=E.cats.length-1;si>=0;si--){
     ctx.beginPath();
-    keys.forEach((k,i)=>{let c=0;for(let j=0;j<=si;j++)c+=E.data[k][E.cats[j].key];i?ctx.lineTo(X(i),Y(c)):ctx.moveTo(X(i),Y(c));});
-    for(let i=keys.length-1;i>=0;i--){let c=0;for(let j=0;j<si;j++)c+=E.data[keys[i]][E.cats[j].key];ctx.lineTo(X(i),Y(c));}
-    ctx.closePath(); ctx.fillStyle=alpha(E.cats[si].color,.38); ctx.fill();
+    full.forEach((o,n)=>{let c=0;for(let j=0;j<=si;j++)c+=E.points[o.k][E.cats[j].key];n?ctx.lineTo(X(o.i),Y(c)):ctx.moveTo(X(o.i),Y(c));});
+    for(let n=full.length-1;n>=0;n--){let c=0;for(let j=0;j<si;j++)c+=E.points[full[n].k][E.cats[j].key];ctx.lineTo(X(full[n].i),Y(c));}
+    ctx.closePath();ctx.fillStyle=alpha(E.cats[si].color,.38);ctx.fill();
   }
-  const accent=tok(E.cvar);
-  const line=(vals,col,w,dash)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);vals.forEach((v,i)=>i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v)));ctx.stroke();ctx.setLineDash([]);};
-  line(tots,accent,2.2);
-  line(subs,tok('--ink'),1.4,[5,4]);
-  if(era==='pw'){line(keys.map(k=>PW[k].sn),'#c0508a',1.6,[1.5,3]);$('trSub').textContent+='　点線＝原子力潜水艦';}
-
-  // current marker + dots + labels
-  const ci=keys.indexOf(state.sel[era]);
+  const accent=tok(E.accent);
+  polyline(ctx,full.map(o=>({x:X(o.i),y:Y(T[o.i].v)})),accent,2.2);
+  polyline(ctx,keys.map((k,i)=>({x:X(i),y:subs[i]==null||T[i].part?null:Y(subs[i])})),tok('--ink'),1.4,[5,4]);
+  if(e==='pw') polyline(ctx,keys.map((k,i)=>({x:X(i),y:Y(E.points[k].sn)})),'#c0508a',1.6,[1.5,3]);
+  const ci=keys.indexOf(state.sel[e]);
   ctx.strokeStyle=alpha('#c9a24a',.35);ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(X(ci),p.top);ctx.lineTo(X(ci),p.top+ch);ctx.stroke();ctx.setLineDash([]);
   trendPts=[];
+  const room=cw/Math.max(keys.length-1,1),every=room<30?3:room<55?2:1;
   keys.forEach((k,i)=>{
-    const d=E.data[k],sel=i===ci,sp=d.dt==='special',x=X(i),y=Y(tots[i]);
-    ctx.beginPath();ctx.arc(x,y,sel?6:4,0,Math.PI*2);ctx.fillStyle=sp?tok('--signal'):accent;ctx.fill();
-    if(sel){ctx.lineWidth=2;ctx.strokeStyle=tok('--bg');ctx.stroke();}
-    ctx.textAlign='center';
-    ctx.font=`${sel?'600 ':''}11px Cinzel, serif`;ctx.fillStyle=sp?tok('--signal'):sel?tok('--ink'):tok('--muted');
-    const lab=keyLabel(era,k);
-    const room=cw/Math.max(keys.length-1,1);           // px between neighbouring points
-    const yrTxt=room<70?lab.split('/')[0].replace(/^1[789]/,"'"):(keys.length>10?lab.replace(/^19/,"'"):lab);
-    const every=room<30?3:room<55?2:1;
-    if(sel||i%every===0||i===keys.length-1&&every===1) ctx.fillText(yrTxt,x,H-p.bottom+16);
-    ctx.font=`10.5px "Shippori Mincho", serif`;ctx.fillStyle=sel?tok('--muted'):tok('--faint');
+    const d=E.points[k],sel=i===ci,sp=d.dt==='special',x=X(i),y=Y(T[i].v);
+    dot(ctx,x,y,sel?6:4,sp?tok('--signal'):accent,T[i].part);
+    if(T[i].part){ctx.font='11px Cinzel, serif';ctx.textAlign='center';ctx.fillStyle=tok('--muted');ctx.fillText('≥'+T[i].v,x,y-10);}
+    ctx.textAlign='center';ctx.font=`${sel?'600 ':''}11px Cinzel, serif`;ctx.fillStyle=sp?tok('--signal'):sel?tok('--ink'):tok('--muted');
+    const lab=keyLabel(e,k),yr=room<70?lab.split('/')[0].replace(/^1[789]/,"'"):(keys.length>10?lab.replace(/^19/,"'"):lab);
+    if(sel||i%every===0) ctx.fillText(yr,x,H-p.bottom+16);
+    ctx.font='10.5px "Shippori Mincho", serif';ctx.fillStyle=sel?tok('--muted'):tok('--faint');
     if(sel||room>=90||(room>=55&&i%2===0)) ctx.fillText(d.sl,Math.min(Math.max(x,p.left+30),W-p.right-30),H-p.bottom+31);
-    trendPts.push({x,y,k,tot:tots[i],sub:subs[i]});
+    trendPts.push({x,y,k,t:T[i],sub:subs[i]});
   });
 }
 
 /* ═════════ OVERVIEW ═════════ */
-let ovPts=[];
+const Y0=1790,Y1=1985;
+let ovPts=[],pePts=[];
+function frame(W){const p={top:30,bottom:34,left:52,right:18};return {p,cw:W-p.left-p.right,X:y=>p.left+(y-Y0)/(Y1-Y0)*(W-p.left-p.right)};}
+function bands(ctx,X,p,ch,labels){
+  const B=[['sail',1790,1855],['trans',1855,1890],['mod',1890,1947.5],['pw',1947.5,1985]],narrow=ctx.canvas.clientWidth<560;
+  B.forEach(([e,s,t],i)=>{ctx.fillStyle=alpha(i%2?'#6f93c4':'#c9a24a',.05);ctx.fillRect(X(s),p.top,X(t)-X(s),ch);
+    if(labels){ctx.font=`600 ${narrow?10:11.5}px "Shippori Mincho", serif`;ctx.textAlign='center';ctx.fillStyle=tok(ERA[e].accent);ctx.fillText(ERA[e].name,(X(s)+X(t))/2,p.top-10);}});
+}
+function xAxis(ctx,X,H,p){const narrow=ctx.canvas.clientWidth<560;ctx.font='11px Cinzel, serif';ctx.fillStyle=tok('--faint');ctx.textAlign='center';for(let y=1800;y<=1980;y+=narrow?40:20) ctx.fillText(y,X(y),H-p.bottom+16);}
 function renderOverview(){
-  const cv=$('ovCv'),{ctx,W,H}=setup(cv);
-  const p={top:30,bottom:34,left:46,right:18}, cw=W-p.left-p.right, ch=H-p.top-p.bottom;
-  const pts=ORDER.flatMap(e=>ERAS[e].keys.map(k=>({era:e,k,yr:decYear(k),tot:sum(ERAS[e].data[k],ERAS[e].cats),sub:ERAS[e].sub(ERAS[e].data[k])})));
-  const top=grid(ctx,p,cw,ch,Math.max(...pts.map(q=>q.tot)));
-  const y0=1790,y1=1985,X=y=>p.left+(y-y0)/(y1-y0)*cw,Y=v=>p.top+ch*(1-v/top);
+  const cv=$('ovCv'),{ctx,W,H}=setup(cv),{p,cw,X}=frame(W),ch=H-p.top-p.bottom;
+  const pts=ORDER.flatMap(e=>ERA[e].order.map(k=>{const t=total(ERA[e].points[k],ERA[e].cats);return {e,k,yr:decYear(k),t,sub:RULES[e].sub(ERA[e].points[k])};}));
+  const top=grid(ctx,p,cw,ch,Math.max(...pts.map(q=>q.t.v))),Y=v=>p.top+ch*(1-v/top);
+  bands(ctx,X,p,ch,true);
   const narrow=W<560;
-
-  // era bands
-  const bands=[['sail',1790,1855],['trans',1855,1890],['mod',1890,1947.5],['pw',1947.5,1985]];
-  bands.forEach(([e,s,t],i)=>{
-    ctx.fillStyle=alpha(i%2?'#6f93c4':'#c9a24a',.05);ctx.fillRect(X(s),p.top,X(t)-X(s),ch);
-    ctx.font=`600 ${narrow?10:11.5}px "Shippori Mincho", serif`;ctx.textAlign='center';ctx.fillStyle=tok(ERAS[e].cvar);
-    ctx.fillText(ERAS[e].name,(X(s)+X(t))/2,p.top-10);
-  });
-  // events
-  const ev=[[1805,'トラファルガー'],[1906,'ドレッドノート'],[1918,'WWI終戦'],[1957,'サンディーズ白書']];
-  ctx.font=`10px "Shippori Mincho", serif`;
-  ev.forEach(([y,l])=>{const x=X(y);ctx.strokeStyle=alpha('#c9a24a',.25);ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(x,p.top);ctx.lineTo(x,p.top+ch);ctx.stroke();ctx.setLineDash([]);
-    if(!narrow){ctx.save();ctx.translate(x+3,p.top+4);ctx.rotate(Math.PI/2);ctx.textAlign='left';ctx.fillStyle=tok('--faint');ctx.fillText(l,0,0);ctx.restore();}});
-
-  // series per era; a faint dotted bridge marks where the counting rules change
+  [[1805,'トラファルガー'],[1889,'海軍防衛法'],[1906,'ドレッドノート'],[1922,'ワシントン条約'],[1957,'サンディーズ白書']].forEach(([y,l])=>{
+    const x=X(y);ctx.strokeStyle=alpha('#c9a24a',.25);ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(x,p.top);ctx.lineTo(x,p.top+ch);ctx.stroke();ctx.setLineDash([]);
+    ctx.save();ctx.translate(x+3,p.top+4);ctx.rotate(Math.PI/2);ctx.textAlign='left';ctx.font=`${narrow?9:10}px "Shippori Mincho", serif`;ctx.fillStyle=tok('--faint');ctx.fillText(l,0,0);ctx.restore();});
   ORDER.forEach((e,ei)=>{
-    const s=pts.filter(q=>q.era===e),col=tok(ERAS[e].cvar);
-    if(ei>0){const a=pts.filter(q=>q.era===ORDER[ei-1]).pop(),b=s[0];ctx.strokeStyle=tok('--faint');ctx.lineWidth=1;ctx.setLineDash([1,4]);ctx.beginPath();ctx.moveTo(X(a.yr),Y(a.tot));ctx.lineTo(X(b.yr),Y(b.tot));ctx.stroke();ctx.setLineDash([]);}
-    ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.beginPath();s.forEach((q,i)=>i?ctx.lineTo(X(q.yr),Y(q.tot)):ctx.moveTo(X(q.yr),Y(q.tot)));ctx.stroke();
-    ctx.globalAlpha=.7;ctx.lineWidth=1.3;ctx.setLineDash([5,4]);ctx.beginPath();s.forEach((q,i)=>i?ctx.lineTo(X(q.yr),Y(q.sub)):ctx.moveTo(X(q.yr),Y(q.sub)));ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+    const s=pts.filter(q=>q.e===e),full=s.filter(q=>!q.t.part),col=tok(ERA[e].accent);
+    if(ei>0){const a=pts.filter(q=>q.e===ORDER[ei-1]&&!q.t.part).pop(),b=full[0];polyline(ctx,[{x:X(a.yr),y:Y(a.t.v)},{x:X(b.yr),y:Y(b.t.v)}],tok('--faint'),1,[1,4]);}
+    polyline(ctx,full.map(q=>({x:X(q.yr),y:Y(q.t.v)})),col,2.2);
+    ctx.globalAlpha=.7;polyline(ctx,full.map(q=>({x:X(q.yr),y:q.sub==null?null:Y(q.sub)})),col,1.3,[5,4]);ctx.globalAlpha=1;
   });
   ovPts=[];
-  pts.forEach(q=>{const x=X(q.yr),y=Y(q.tot),sp=ERAS[q.era].data[q.k].dt==='special';ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fillStyle=sp?tok('--signal'):tok(ERAS[q.era].cvar);ctx.fill();ovPts.push({...q,x,y});});
-  // x axis decades
-  ctx.font=`11px Cinzel, serif`;ctx.fillStyle=tok('--faint');ctx.textAlign='center';
-  for(let y=1800;y<=1980;y+=narrow?40:20){ctx.fillText(y,X(y),H-p.bottom+16);}
+  pts.forEach(q=>{const x=X(q.yr),y=Y(q.t.v),sp=ERA[q.e].points[q.k].dt==='special';dot(ctx,x,y,3.5,sp?tok('--signal'):tok(ERA[q.e].accent),q.t.part);ovPts.push({...q,x,y});});
+  (D.annotations||[]).forEach(a=>{const x=X(a.yr),y=Y(a.value);ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);ctx.lineWidth=1.6;ctx.strokeStyle=tok('--signal');ctx.fillStyle=tok('--bg');ctx.fillRect(-4,-4,8,8);ctx.strokeRect(-4,-4,8,8);ctx.restore();ovPts.push({ann:a,x,y});});
+  xAxis(ctx,X,H,p);
 }
-
+function renderPersonnel(){
+  const P=D.personnel,cv=$('peCv'),{ctx,W,H}=setup(cv),{p,cw,X}=frame(W),pp={...p,top:14},ch=H-pp.top-pp.bottom;
+  $('pnote').textContent='単位：千人';
+  const top=grid(ctx,pp,cw,ch,Math.max(...P.series.map(s=>s.value)),v=>Math.round(v/1000)),Y=v=>pp.top+ch*(1-v/top);
+  bands(ctx,X,pp,ch,false);
+  const pts=P.series.map(s=>({s,x:X(decYear(s.date)),y:Y(s.value)}));
+  polyline(ctx,pts,tok('--sea'),2);
+  pePts=[];
+  pts.forEach(q=>{dot(ctx,q.x,q.y,3.5,tok('--sea'));pePts.push(q);});
+  ctx.font='10.5px Cinzel, serif';ctx.textAlign='center';ctx.fillStyle=tok('--muted');
+  const peak=pts.reduce((a,b)=>b.s.value>a.s.value?b:a);ctx.fillText(Math.round(peak.s.value/1000)+'k',peak.x,peak.y-9);
+  xAxis(ctx,X,H,pp);
+}
 function renderSums(){
   $('sums').innerHTML=ORDER.map(e=>{
-    const E=ERAS[e],tots=E.keys.map(k=>[k,sum(E.data[k],E.cats)]);
-    const peak=tots.reduce((a,b)=>b[1]>a[1]?b:a),last=tots[tots.length-1],first=tots[0];
-    return `<button class="sum" data-era="${e}" style="--c:var(${E.cvar})"><b>${E.name}</b><span class="r">${E.range}</span>
-      <dl><dt>最大</dt><dd>${peak[1]}隻（${esc(keyLabel(e,peak[0]))}）</dd><dt>始点</dt><dd>${first[1]}隻</dd><dt>終点</dt><dd>${last[1]}隻</dd></dl></button>`;
-  }).join('');
+    const E=ERA[e],tots=E.order.map(k=>[k,total(E.points[k],E.cats)]).filter(x=>!x[1].part);
+    const peak=tots.reduce((a,b)=>b[1].v>a[1].v?b:a),first=tots[0],last=tots[tots.length-1];
+    return `<button class="sum" data-v="${e}" style="--c:var(${E.accent})"><b>${E.name}</b><span class="r">${E.range}</span>
+      <dl><dt>最大</dt><dd>${peak[1].v}隻（${esc(keyLabel(e,peak[0]))}）</dd><dt>始点</dt><dd>${first[1].v}隻</dd><dt>終点</dt><dd>${last[1].v}隻</dd></dl></button>`;}).join('');
 }
-$('sums').addEventListener('click',e=>{const b=e.target.closest('.sum');if(b) go(b.dataset.era);});
 
-/* ═════════ CANVAS INTERACTION ═════════ */
+/* ═════════ RIVALS ═════════ */
+function renderRivals(){
+  const R=D.rivals,srcLine=ids=>`<p class="rsrc">出典：${ids.map(id=>{const s=D.sources[id];return s.url?`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`:esc(s.label);}).join('、')}</p>`;
+  $('rvCharts').innerHTML=R.charts.map(c=>{const mx=Math.max(...c.rows.map(r=>r.v));
+    return `<div class="rc"><h3>${esc(c.title)}</h3>${c.rows.map(r=>`<div class="rrow${r.uk?' uk':''}"><span class="n">${esc(r.c)}</span><div class="rbar"><i style="width:${r.v/mx*100}%"></i><em>${r.v}${esc(c.unit)}</em></div>${r.sub?`<small>${esc(r.sub)}</small>`:''}</div>`).join('')}<p class="rnote">${esc(c.note)}</p>${srcLine(c.src)}</div>`;}).join('');
+  $('rvNotes').innerHTML=R.notes.map(n=>`<li><b>${esc(n.when)}</b><div><p>${esc(n.text)}</p>${srcLine(n.src)}</div></li>`).join('');
+}
+
+/* ═════════ TABLE ═════════ */
+function csvFor(e){
+  const E=ERA[e],q=s=>/[",\n]/.test(s)?`"${String(s).replace(/"/g,'""')}"`:s;
+  const head=['era','date','label',...E.cats.map(c=>c.key),'total','partial','accuracy','sources'];
+  const lines=E.order.map(k=>{const d=E.points[k],t=total(d,E.cats);return [e,k,d.lb||k,...E.cats.map(c=>d[c.key]??''),t.v,t.part?1:0,d.acc,(d.src||[]).join(' ')].map(q).join(',');});
+  return [head.join(','),'# '+E.cats.map(c=>`${c.key}=${c.label}`).join(' / '),...lines].join('\n');
+}
+function renderTable(){
+  const e=state.tb,E=ERA[e];
+  $('tbTools').innerHTML=ORDER.map(x=>`<button class="chip" data-e="${x}" aria-pressed="${x===e}">${ERA[x].name}</button>`).join('')+`<button class="chip" data-e="personnel" aria-pressed="${e==='personnel'}">兵員数</button><span class="status" id="cpStatus" role="status"></span><button class="btn" id="cpBtn">CSVをコピー</button>`;
+  $('tbTools').onclick=ev=>{const c=ev.target.closest('.chip');if(c){state.tb=c.dataset.e;$('csvBox').hidden=true;renderTable();}};
+  let csv;
+  if(e==='personnel'){
+    $('tbl').innerHTML=`<thead><tr><th>時点</th><th>人数</th><th class="src">何を数えたか</th><th class="src">出典</th></tr></thead><tbody>${D.personnel.series.map(s=>`<tr><td>${esc(s.date)}</td><td>${fmtN(s.value)}</td><td class="src">${esc(s.scope)}</td><td class="src">${s.src.map(id=>esc(D.sources[id].label)).join('、')}</td></tr>`).join('')}</tbody>`;
+    csv=['date,value,scope,sources',...D.personnel.series.map(s=>[s.date,s.value,`"${s.scope}"`,s.src.join(' ')].join(','))].join('\n');
+  } else {
+    $('tbl').innerHTML=`<thead><tr><th>時点</th>${E.cats.map(c=>`<th>${esc(c.label)}</th>`).join('')}<th>合計</th><th>精度</th><th class="src">出典</th></tr></thead><tbody>${E.order.map(k=>{const d=E.points[k],t=total(d,E.cats);
+      return `<tr class="${t.part?'part':''}"><td>${esc(d.lb||k)}</td>${E.cats.map(c=>`<td>${d[c.key]==null?'—':((d.min||[]).includes(c.key)?'≥':'')+d[c.key]}</td>`).join('')}<td>${totStr(t)}</td><td>${{high:'高',mid:'中',low:'低'}[d.acc]}</td><td class="src">${(d.src||[]).map(id=>esc(D.sources[id].label)).join('、')}</td></tr>`;}).join('')}</tbody>`;
+    csv=csvFor(e);
+  }
+  $('cpBtn').onclick=()=>{
+    const box=$('csvBox');box.value=csv;
+    const fallback=()=>{box.hidden=false;box.focus();box.select();$('cpStatus').textContent='下の欄を選択してコピーしてください';};
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(csv).then(()=>{$('cpStatus').textContent='コピーしました';},fallback); else fallback();
+  };
+  $('srcList').innerHTML=Object.keys(D.sources).map(id=>srcHtml([id]).replace(/^<ul class="srcs">|<\/ul>$/g,'')).join('');
+}
+
+/* ═════════ INTERACTION ═════════ */
 function nearest(list,mx,my,r){let best=null,bd=r*r;list.forEach(q=>{const d=(q.x-mx)**2+(q.y-my)**2*0.15;if(d<bd){bd=d;best=q;}});return best;}
 function wire(cv,tip,getList,html,onPick){
   const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
   cv.addEventListener('pointermove',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(q) showTip(tip,cv,q.x,q.y,html(q));else tip.hidden=true;});
   cv.addEventListener('pointerleave',()=>tip.hidden=true);
-  cv.addEventListener('click',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(q) onPick(q);});
+  cv.addEventListener('click',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(q&&onPick) onPick(q);});
 }
-wire($('trendCv'),$('trendTip'),()=>trendPts,
-  q=>{const E=ERAS[state.era];return `<b>${esc(keyLabel(state.era,q.k))}</b> <span>${esc(E.data[q.k].era)}</span><br>総数 <b>${q.tot}</b>隻 <span>／ ${E.subLabel} ${q.sub}</span>`;},
-  q=>select(q.k));
-wire($('ovCv'),$('ovTip'),()=>ovPts,
-  q=>`<b>${esc(keyLabel(q.era,q.k))}</b> <span>${ERAS[q.era].name}</span><br>総数 <b>${q.tot}</b>隻 <span>／ ${ERAS[q.era].subLabel} ${q.sub}</span>`,
-  q=>go(q.era,q.k));
+function initInteraction(){
+  wire($('trendCv'),$('trendTip'),()=>trendPts,q=>{const e=state.view;return `<b>${esc(keyLabel(e,q.k))}</b> <span>${esc(ERA[e].points[q.k].era)}</span><br>総数 <b>${totStr(q.t)}</b>隻 <span>／ ${RULES[e].subLabel} ${fmtN(q.sub)}</span>`;},q=>select(q.k));
+  wire($('ovCv'),$('ovTip'),()=>ovPts,q=>q.ann?`<b>${esc(q.ann.label)}</b> <span>就役中の主要艦</span><br><b>${q.ann.value}</b>隻 <span>／ ${esc(q.ann.text)}</span>`:`<b>${esc(keyLabel(q.e,q.k))}</b> <span>${ERA[q.e].name}</span><br>総数 <b>${totStr(q.t)}</b>隻 <span>／ ${RULES[q.e].subLabel} ${fmtN(q.sub)}</span>`,q=>{if(!q.ann) go(q.e,q.k);});
+  wire($('peCv'),$('peTip'),()=>pePts,q=>`<b>${esc(q.s.date)}</b> <b>${fmtN(q.s.value)}</b>人<br><span>${esc(q.s.scope)}</span>`);
+  $('sums').onclick=e=>{const b=e.target.closest('.sum');if(b) go(b.dataset.v);};
+  $('prevBtn').onclick=()=>step(-1);$('nextBtn').onclick=()=>step(1);
+  document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select'))return;if(e.key==='ArrowLeft'){step(-1);e.preventDefault();}if(e.key==='ArrowRight'){step(1);e.preventDefault();}});
+}
+const redraw=()=>{if(ERA[state.view]) renderTrend();else if(state.view==='all'){renderOverview();renderPersonnel();}};
 
-/* ═════════ INIT ═════════ */
-$('prevBtn').onclick=()=>step(-1);
-$('nextBtn').onclick=()=>step(1);
-document.addEventListener('keydown',e=>{
-  if(e.target.closest('input,textarea,select')) return;
-  if(e.key==='ArrowLeft'){step(-1);e.preventDefault();}
-  if(e.key==='ArrowRight'){step(1);e.preventDefault();}
+/* ═════════ BOOT ═════════ */
+function boot(data){
+  D=data;
+  D.eras.forEach(E=>{ERA[E.id]=E;ORDER.push(E.id);});
+  const a=total(ERA.mod.points['1945-08'],ERA.mod.cats).v,b=total(ERA.pw.points['1982-06'],ERA.pw.cats).v;
+  ERA.pw.caveat=`戦後縮小期は朝鮮戦争の1950年からフォークランド紛争終結（1982年6月）まで。終戦時の約${a}隻から1982年には約${b}隻へ、およそ${Math.round(a/b)}分の1に縮小しました。1947年冬には就役中の主要艦が80隻まで落ち込んでいます（全期間概観のひし形）。数の減少と同時に、帝国の海軍からNATOの対潜海軍へと役割そのものが変わった時代です。`;
+  buildTabs();initInteraction();
+  const H={};ORDER.forEach(e=>H[ERA[e].hash]=e);AUX.forEach(x=>H[x.hash]=x.id);
+  const fromHash=()=>go(H[location.hash.slice(1)]||'sail',null,false);
+  window.addEventListener('hashchange',fromHash);fromHash();
+  let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(redraw,80);});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+  new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(document.fonts) document.fonts.ready.then(redraw);
+}
+fetch('data.json').then(r=>{if(!r.ok) throw new Error(r.status);return r.json();}).then(boot).catch(err=>{
+  const el=$('loadErr');el.hidden=false;
+  el.textContent=`データ（data.json）を読み込めませんでした（${err.message}）。このページは data.json と同じフォルダに置き、ウェブサーバー経由で開く必要があります。手元で開く場合は、このフォルダで「python3 -m http.server」を実行し、表示された http://localhost:8000 を開いてください。`;
 });
-const HASH={sail:'sail',transition:'trans',modern:'mod',postwar:'pw',overview:'all'};
-function fromHash(){const e=HASH[location.hash.slice(1)];go(e||'sail',null,false);}
-window.addEventListener('hashchange',fromHash);
-let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>state.era==='all'?renderOverview():renderTrend(),80);});
-const redraw=()=>state.era==='all'?renderOverview():renderTrend();
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
-new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-buildEraTabs();
-fromHash();
-if(document.fonts) document.fonts.ready.then(redraw);
 </script>
