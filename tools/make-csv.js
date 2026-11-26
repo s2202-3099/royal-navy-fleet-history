@@ -1,4 +1,5 @@
 // Regenerate data.csv from data.json:  node tools/make-csv.js
+// Empty cell = unknown; 'n/c' = category not counted at that date; '>=' = lower bound.
 const fs=require('fs'),path=require('path');
 const root=path.join(__dirname,'..');
 const D=JSON.parse(fs.readFileSync(path.join(root,'data.json'),'utf8'));
@@ -7,7 +8,7 @@ const keys=[...new Set(D.eras.flatMap(e=>e.cats.map(c=>c.key)))];
 const rows=[['era','date','label',...keys,'total_known','partial','accuracy','sources'].join(',')];
 for(const E of D.eras) for(const k of E.order){
   const d=E.points[k];let t=0,part=!!(d.min&&d.min.length);
-  const vals=keys.map(key=>{const inEra=E.cats.some(c=>c.key===key);if(!inEra) return '';const v=d[key];if(v==null){part=true;return '';}t+=v;return ((d.min||[]).includes(key)?'>=':'')+v;});
+  const vals=keys.map(key=>{const inEra=E.cats.some(c=>c.key===key);if(!inEra) return '';if((d.excl||[]).includes(key)) return 'n/c';const v=d[key];if(v==null){part=true;return '';}t+=v;return ((d.min||[]).includes(key)?'>=':'')+v;});
   rows.push([E.id,k,d.lb||k,...vals,t,part?1:0,d.acc,(d.src||[]).join(' ')].map(q).join(','));
 }
 fs.writeFileSync(path.join(root,'data.csv'),rows.join('\n')+'\n');

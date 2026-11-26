@@ -92,6 +92,7 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .rl i{display:block;font-size:11.5px;color:var(--faint)}
 .track{position:relative;height:26px;background:var(--bg2);border:1px solid var(--line);border-radius:2px}
 .track.unk{background:repeating-linear-gradient(135deg,var(--bg2) 0 6px,var(--line) 6px 7px)}
+.track.excl{background:transparent;border-style:dashed}
 .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:1px;transition:width .55s cubic-bezier(.4,0,.2,1)}
 .fill::after{content:'';position:absolute;inset:0 0 55% 0;background:rgba(255,255,255,.1)}
 .fill.min{mask-image:linear-gradient(90deg,#000 80%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent)}
@@ -102,6 +103,7 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .key{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-size:12.5px;color:var(--muted)}
 .key span{display:inline-flex;align-items:center;gap:6px}
 .key i{display:inline-block;width:2px;height:13px;background:var(--ink);opacity:.55}
+.key u{display:inline-block;width:18px;height:11px;border:1px dashed var(--line2)}
 .key s{display:inline-block;width:18px;height:11px;background:repeating-linear-gradient(135deg,var(--bg2) 0 4px,var(--line2) 4px 5px);border:1px solid var(--line)}
 
 .side{border-left:1px solid var(--line);padding:22px 0 18px 18px;display:grid;gap:16px;align-content:start;min-width:0}
@@ -218,7 +220,7 @@ footer p{margin:0 0 4px}
     <div class="bars">
       <h2 class="ph"><span id="barTitle"></span><em id="barScale"></em></h2>
       <div class="rows" id="rows"></div>
-      <div class="key"><span><i></i>縦線＝前の時点の数</span><span>％＝判明分の合計に占める割合</span><span><s></s>出典で確かめられなかった値</span></div>
+      <div class="key"><span><i></i>縦線＝前の時点の数</span><span>％＝判明分の合計に占める割合</span><span><s></s>出典で確かめられなかった値</span><span><u></u>その時点では数えていない区分</span></div>
     </div>
     <aside class="side" id="side"></aside>
   </section>
@@ -254,7 +256,7 @@ footer p{margin:0 0 4px}
     <div class="th"><h2>データ表と出典</h2><p>表の数字は data.json と同じものです</p></div>
     <div class="tools" id="tbTools"></div>
     <div class="tscroll"><table id="tbl"></table></div>
-    <p class="legend">* は一部の艦種が不明な時点。「—」は出典で確かめられなかった値、「≥」は下限値。</p>
+    <p class="legend">* は一部の艦種が不明な時点。「—」は出典で確かめられなかった値、「≥」は下限値、「·」はその時点では数えていない区分。</p>
     <textarea id="csvBox" hidden readonly aria-label="CSV"></textarea>
     <div class="th sub2"><h2>出典一覧</h2></div>
     <ul class="srclist" id="srcList"></ul>
@@ -293,7 +295,9 @@ const RULES={
     tiles:(d,t,E)=>{const b=total(E.points['1950'],E.cats).v;const r=t.v/b;return [[t,'総艦艇数'],[{v:Math.round(r*100)+'%'},'1950年比',r<.4?'--bad':r<.7?'--warn':'--good'],[d.cv,'空母'],[d.ff,'フリゲート']];}},
 };
 // total of known values; partial when any value is unknown or a lower bound
-function total(d,cats){let v=0,part=false;cats.forEach(c=>{if(d[c.key]==null)part=true;else v+=d[c.key];});if(d.min&&d.min.length)part=true;return {v,part};}
+// a key listed in d.excl is deliberately not counted at that date ("対象外"), which is not the same as unknown
+const isExcl=(d,k)=>(d.excl||[]).includes(k);
+function total(d,cats){let v=0,part=false;cats.forEach(c=>{if(isExcl(d,c.key))return;if(d[c.key]==null)part=true;else v+=d[c.key];});if(d.min&&d.min.length)part=true;return {v,part};}
 const totStr=t=>(t.part?'≥':'')+fmtN(t.v);
 const keyLabel=(e,k)=>ERA[e].points[k].lb||k;
 const isPart=(e,k)=>total(ERA[e].points[k],ERA[e].cats).part;
@@ -354,14 +358,15 @@ function render(){
     rows.innerHTML=E.cats.map(c=>`<div class="row" data-c="${c.key}"><div class="rl"><b>${c.label}</b>${c.sub?`<i>${c.sub}</i>`:''}</div><div class="track"><div class="fill" style="background:${c.color}"></div><div class="prev" hidden></div></div><div class="rv"></div></div>`).join('');
   }
   E.cats.forEach(c=>{
-    const row=rows.querySelector(`[data-c="${c.key}"]`),v=d[c.key],unk=v==null,mn=(d.min||[]).includes(c.key);
+    const row=rows.querySelector(`[data-c="${c.key}"]`),v=d[c.key],ex=isExcl(d,c.key),unk=v==null&&!ex,mn=(d.min||[]).includes(c.key);
     row.querySelector('.track').classList.toggle('unk',unk);
+    row.querySelector('.track').classList.toggle('excl',ex);
     const f=row.querySelector('.fill'); f.style.width=unk?'0':(v/maxV*100)+'%'; f.classList.toggle('min',mn);
     const pv=row.querySelector('.prev'),p=pd?pd[c.key]:null;
     if(p!=null){pv.hidden=false;pv.style.left=`calc(${p/maxV*100}% - 1px)`;pv.title=`${keyLabel(e,pk)}：${p}隻`;} else pv.hidden=true;
     const rv=row.querySelector('.rv');
-    rv.className='rv'+(unk?' unk':v===0?' zero':'');
-    rv.innerHTML=unk?'—<small>不明</small>':`${mn?'≥':''}${v}<small>${t.v?Math.round(v/t.v*100):0}%</small>`;
+    rv.className='rv'+(unk||ex?' unk':v===0?' zero':'');
+    rv.innerHTML=ex?'·<small>数えない</small>':unk?'—<small>不明</small>':`${mn?'≥':''}${v}<small>${t.v?Math.round(v/t.v*100):0}%</small>`;
   });
 
   let delta='';
@@ -519,7 +524,7 @@ function renderTable(){
     csv=['date,value,scope,sources',...D.personnel.series.map(s=>[s.date,s.value,`"${s.scope}"`,s.src.join(' ')].join(','))].join('\n');
   } else {
     $('tbl').innerHTML=`<thead><tr><th>時点</th>${E.cats.map(c=>`<th>${esc(c.label)}</th>`).join('')}<th>合計</th><th>精度</th><th class="src">出典</th></tr></thead><tbody>${E.order.map(k=>{const d=E.points[k],t=total(d,E.cats);
-      return `<tr class="${t.part?'part':''}"><td>${esc(d.lb||k)}</td>${E.cats.map(c=>`<td>${d[c.key]==null?'—':((d.min||[]).includes(c.key)?'≥':'')+d[c.key]}</td>`).join('')}<td>${totStr(t)}</td><td>${{high:'高',mid:'中',low:'低'}[d.acc]}</td><td class="src">${(d.src||[]).map(id=>esc(D.sources[id].label)).join('、')}</td></tr>`;}).join('')}</tbody>`;
+      return `<tr class="${t.part?'part':''}"><td>${esc(d.lb||k)}</td>${E.cats.map(c=>`<td>${isExcl(d,c.key)?'·':d[c.key]==null?'—':((d.min||[]).includes(c.key)?'≥':'')+d[c.key]}</td>`).join('')}<td>${totStr(t)}</td><td>${{high:'高',mid:'中',low:'低'}[d.acc]}</td><td class="src">${(d.src||[]).map(id=>esc(D.sources[id].label)).join('、')}</td></tr>`;}).join('')}</tbody>`;
     csv=csvFor(e);
   }
   $('cpBtn').onclick=()=>{
