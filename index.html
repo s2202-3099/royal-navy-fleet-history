@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Royal Navy 1793–1982</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="イギリス海軍の艦艇数と兵員数を、帆船時代から1982年のフォークランド紛争まで時代ごとの分類で追う図表。数字ごとに出典つき。">
@@ -51,17 +53,36 @@ h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,5vw,46px);l
 h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:var(--muted);margin-top:6px}
 .lede{font-size:15px;color:var(--muted);max-width:62ch;margin:4px 0 0}
 
-.eras{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
-.eras::-webkit-scrollbar{display:none}
-.era{flex:1 0 auto;min-width:104px;background:none;border:0;border-bottom:3px solid transparent;padding:14px 10px 10px;cursor:pointer;text-align:center;color:var(--muted);transition:color .2s,border-color .2s}
-.era b{display:block;font-family:var(--f-jp);font-weight:700;font-size:15px;letter-spacing:.08em}
-.era span{display:block;font-family:var(--f-display);font-size:11px;letter-spacing:.12em;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
+/* Navigation: four eras (the main axis) + three cross-era views. Never scrolls sideways. */
+.nav{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,3fr);border-bottom:1px solid var(--line)}
+.nav-g{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+.nav-g.aux{border-left:1px solid var(--line)}
+.era{background:none;border:0;border-bottom:3px solid transparent;padding:14px 6px 10px;cursor:pointer;text-align:center;color:var(--muted);transition:color .2s,border-color .2s;min-width:0}
+.era b{display:block;font-family:var(--f-jp);font-weight:700;font-size:15px;letter-spacing:.06em;white-space:nowrap}
+.era b .s{display:none}
+.era>span{display:block;font-family:var(--f-display);font-size:11px;letter-spacing:.1em;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .era:hover{color:var(--ink)}
 .era[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--era-c,var(--gold))}
-.era[aria-selected="true"] span{color:var(--era-c,var(--gold))}
-.era.aux b{font-weight:600}
+.era[aria-selected="true"]>span{color:var(--era-c,var(--gold))}
+.nav-g.aux .era b{font-weight:600}
+@media (max-width:899px){
+  .nav{grid-template-columns:minmax(0,1fr);gap:0}
+  .nav-g.aux{border-left:0;border-top:1px solid var(--line)}
+  .nav-g.aux .era{padding:9px 4px 7px}
+  .nav-g.aux .era b{font-size:13.5px}
+  .nav-g.aux .era>span{display:none}
+}
+@media (max-width:520px){
+  .era{padding:11px 2px 8px}
+  .era b{font-size:14px;letter-spacing:.02em}
+  .era b .l{display:none} .era b .s{display:inline}
+  .era>span{font-size:10px;letter-spacing:.02em}
+}
 
-.strip{display:flex;align-items:stretch;gap:6px;border-bottom:1px solid var(--line);padding-block:8px}
+.strip{display:flex;align-items:stretch;gap:6px;border-bottom:1px solid var(--line);padding-block:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+@media (pointer:coarse){.step{flex-basis:44px}.date{padding-block:9px 7px}}
+@media (hover:none){.kbd{display:none}}
 .step{flex:0 0 36px;background:var(--panel);border:1px solid var(--line);border-radius:4px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
 .step:hover:not(:disabled){color:var(--ink);border-color:var(--line2)}
 .step:disabled{opacity:.35;cursor:default}
@@ -78,10 +99,34 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .caveat{font-size:14px;color:var(--muted);font-style:italic;padding:10px 2px;border-bottom:1px solid var(--line);margin:0}
 .caveat::before{content:'※ ';font-style:normal;color:var(--era-c,var(--gold))}
 
-.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;border-bottom:1px solid var(--line)}
-@media (max-width:820px){.main{grid-template-columns:minmax(0,1fr)}.side{border-left:0!important;border-top:1px solid var(--line)}}
-.bars{padding:22px 18px 18px 0;min-width:0}
-@media (max-width:820px){.bars{padding-right:0}}
+/* Era view. PC: bars left, summary + details in a right column.
+   Tablet: summary band on top, full-width bars, details in two columns.
+   Phone: summary, bars, then details as collapsible sections. */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-areas:"bars summary" "bars details";grid-template-rows:auto 1fr;border-bottom:1px solid var(--line)}
+.summary{grid-area:summary;border-left:1px solid var(--line);padding:22px 0 0 20px;display:grid;gap:14px;align-content:start;min-width:0}
+.details{grid-area:details;border-left:1px solid var(--line);padding:16px 0 18px 20px;display:grid;gap:16px;align-content:start;min-width:0}
+.bars{grid-area:bars;padding:22px 20px 18px 0;min-width:0}
+@media (max-width:1099px){
+  .main{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"summary summary" "bars bars" "details details";grid-template-rows:auto}
+  .summary{border-left:0;padding:20px 0 16px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start;border-bottom:1px solid var(--line)}
+  .bars{padding:20px 0 18px}
+  .details{border-left:0;border-top:1px solid var(--line);padding:18px 0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+  .details .dsec.ships-sec{grid-row:span 2}
+}
+@media (max-width:699px){
+  .summary{grid-template-columns:minmax(0,1fr);gap:12px}
+  .details{grid-template-columns:minmax(0,1fr);gap:0;padding:0}
+  .details .dsec{border-bottom:1px solid var(--line)}
+  .rl i{display:none}
+}
+.dsec>summary{list-style:none;cursor:pointer}
+.dsec>summary::-webkit-details-marker{display:none}
+.dsec>summary .sh{display:flex;justify-content:space-between;align-items:center;margin:0}
+.dsec>summary .sh::after{content:'＋';color:var(--faint);font-size:14px}
+.dsec[open]>summary .sh::after{content:'－'}
+.dsec[open]>summary{margin-bottom:8px}
+@media (min-width:700px){.dsec>summary{pointer-events:none}.dsec>summary .sh::after{display:none}}
+@media (max-width:699px){.dsec>summary{padding:14px 0}.dsec[open]{padding-bottom:14px}}
 .ph{font-family:var(--f-jp);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--muted);margin:0 0 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph em{font-style:normal;font-weight:400;color:var(--faint)}
 .rows{display:grid;gap:9px}
@@ -106,8 +151,6 @@ h1 small{display:block;font-family:var(--f-jp);font-weight:600;font-size:clamp(1
 .key u{display:inline-block;width:18px;height:11px;border:1px dashed var(--line2)}
 .key s{display:inline-block;width:18px;height:11px;background:repeating-linear-gradient(135deg,var(--bg2) 0 4px,var(--line2) 4px 5px);border:1px solid var(--line)}
 
-.side{border-left:1px solid var(--line);padding:22px 0 18px 18px;display:grid;gap:16px;align-content:start;min-width:0}
-@media (max-width:820px){.side{padding-left:0}}
 .badge{display:inline-block;font-family:var(--f-jp);font-size:11.5px;letter-spacing:.06em;padding:1px 8px;border:1px solid var(--line2);color:var(--muted)}
 .badge.sp{border-color:var(--signal);color:var(--signal)}
 .yhero{display:grid;gap:4px}
@@ -198,16 +241,36 @@ tr.part td:first-child::after{content:' *';color:var(--faint)}
 footer{padding-block:18px 8px;font-size:13px;color:var(--faint);line-height:1.8}
 footer p{margin:0 0 4px}
 
+/* Phone & tablet refinements */
+td:first-child,th:first-child{position:sticky;left:0;z-index:1;background:var(--panel)}
+th:first-child{z-index:2;background:var(--bg2)}
+td{background:var(--panel)}
+@media (max-width:699px){
+  header{padding-block:22px 16px}
+  .lede{font-size:14px}
+  .caveat{font-size:13px}
+  .ynum{font-size:36px}
+  .tile b{font-size:21px}
+  td.src,th.src{min-width:0;max-width:14em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  th,td{padding:6px 8px}
+  .th{margin-bottom:8px}
+  .tools .btn{margin-left:0}
+  .rrow{grid-template-columns:6.5em minmax(0,1fr)}
+  .rl i{display:none}
+  .row{grid-template-columns:92px minmax(0,1fr) 56px}
+}
+@media (min-width:1400px){.wrap{max-width:1280px}}
+
 @media (prefers-reduced-motion:reduce){.fill,.prev{transition:none}}
 </style>
 
 <div class="wrap">
 <header>
   <h1>ROYAL NAVY<small>イギリス海軍 艦艇数推移 1793〜1982年</small></h1>
-  <p class="lede">帆船時代から戦後縮小まで189年分の艦艇数を、時代ごとの分類のまま並べています。年を選ぶと内訳・代表艦・出典が出ます。← → キーでも年を移れます。</p>
+  <p class="lede">帆船時代から戦後縮小まで189年分の艦艇数を、時代ごとの分類のまま並べています。年を選ぶと内訳・代表艦・出典が出ます。<span class="kbd">← → キーでも年を移れます。</span></p>
 </header>
 
-<nav class="eras" id="eras" role="tablist" aria-label="表示"></nav>
+<nav class="nav" id="eras" aria-label="表示"><div class="nav-g" id="navEras" role="tablist" aria-label="時代"></div><div class="nav-g aux" id="navAux" role="tablist" aria-label="全体の比較"></div></nav>
 
 <div id="eraView" hidden>
   <div class="strip">
@@ -217,17 +280,18 @@ footer p{margin:0 0 4px}
   </div>
   <p class="caveat" id="caveat"></p>
   <section class="main">
+    <div class="summary" id="summary"></div>
     <div class="bars">
       <h2 class="ph"><span id="barTitle"></span><em id="barScale"></em></h2>
       <div class="rows" id="rows"></div>
       <div class="key"><span><i></i>縦線＝前の時点の数</span><span>％＝判明分の合計に占める割合</span><span><s></s>出典で確かめられなかった値</span><span><u></u>その時点では数えていない区分</span></div>
     </div>
-    <aside class="side" id="side"></aside>
+    <div class="details" id="details"></div>
   </section>
   <section class="trend">
     <div class="th"><h2 id="trTitle"></h2><p id="trSub"></p></div>
     <div class="cv"><canvas id="trendCv" height="220" aria-label="時代内の総艦艇数推移グラフ"></canvas><div class="tip" id="trendTip" hidden></div></div>
-    <p class="hint">点をクリックするとその時点に移ります。白抜きの点は一部の艦種が不明な時点で、判明分の合計（下限）の位置に置いています。</p>
+    <p class="hint">点をクリックするとその時点に移ります（スマホでは1回目のタップで値、2回目で移動）。白抜きの点は一部の艦種が不明な時点で、判明分の合計（下限）の位置に置いています。</p>
   </section>
 </div>
 
@@ -235,7 +299,7 @@ footer p{margin:0 0 4px}
   <section class="overview">
     <div class="th"><h2>全期間の総艦艇数（1793–1982）</h2><p>時代ごとに数え方が違うため、線は時代の境目で切っています</p></div>
     <div class="cv"><canvas id="ovCv" height="300" aria-label="全期間の総艦艇数推移グラフ"></canvas><div class="tip" id="ovTip" hidden></div></div>
-    <p class="hint">実線＝総数、破線＝その時代の主力艦（戦列艦→装甲艦→戦艦・巡洋戦艦→空母）。白抜きの点＝一部不明（下限）、ひし形＝就役中の主要艦だけを数えた別の指標。点をクリックすると該当の時点に移ります。</p>
+    <p class="hint">実線＝総数、破線＝その時代の主力艦（戦列艦→装甲艦→戦艦・巡洋戦艦→空母）。白抜きの点＝一部不明（下限）、ひし形＝就役中の主要艦だけを数えた別の指標。点をクリックすると該当の時点に移ります（スマホでは2回タップ）。</p>
     <div class="th sub2"><h2>兵員数（1793–1982）</h2><p id="pnote"></p></div>
     <div class="cv"><canvas id="peCv" height="200" aria-label="兵員数の推移グラフ"></canvas><div class="tip" id="peTip" hidden></div></div>
     <p class="hint">艦艇数と違って、兵員数は時代をまたいで同じ物差しで比べられます。ただし定員と実数、海兵隊を含むかどうかは資料ごとに違い、点に触れると何を数えた数字かが出ます。</p>
@@ -304,12 +368,15 @@ const isPart=(e,k)=>total(ERA[e].points[k],ERA[e].cats).part;
 
 /* ═════════ STATE & ROUTING ═════════ */
 const state={view:'sail',sel:{sail:'1805',trans:'1870',mod:'1939-09',pw:'1982-04'},tb:'mod'};
-const AUX=[{id:'all',name:'全期間概観',range:'1793–1982',hash:'overview'},{id:'rivals',name:'他国比較',range:'1805–1945',hash:'rivals'},{id:'table',name:'データ表',range:'出典つき',hash:'data'}];
+const AUX=[{id:'all',name:'全期間概観',short:'概観',range:'1793–1982',hash:'overview'},{id:'rivals',name:'他国比較',short:'他国',range:'1805–1945',hash:'rivals'},{id:'table',name:'データ表',short:'データ',range:'出典つき',hash:'data'}];
+const SHORT={sail:'帆船',trans:'移行期',mod:'近代',pw:'戦後'};
+const narrowScreen=()=>matchMedia('(max-width:699px)').matches;
 const hashOf=v=>ERA[v]?ERA[v].hash:AUX.find(a=>a.id===v).hash;
 
 function buildTabs(){
-  const items=[...ORDER.map(e=>({id:e,name:ERA[e].name,range:ERA[e].range,c:ERA[e].accent})),...AUX.map(a=>({...a,c:'--gold',aux:true}))];
-  $('eras').innerHTML=items.map(it=>`<button class="era${it.aux?' aux':''}" role="tab" data-v="${it.id}" style="--era-c:var(${it.c})" aria-selected="false"><b>${it.name}</b><span>${it.range}</span></button>`).join('');
+  const btn=it=>`<button class="era" role="tab" data-v="${it.id}" style="--era-c:var(${it.c})" aria-selected="false"><b><span class="l">${it.name}</span><span class="s">${it.short}</span></b><span>${it.range}</span></button>`;
+  $('navEras').innerHTML=ORDER.map(e=>btn({id:e,name:ERA[e].name,short:SHORT[e]||ERA[e].name,range:ERA[e].range,c:ERA[e].accent})).join('');
+  $('navAux').innerHTML=AUX.map(a=>btn({...a,c:'--gold'})).join('');
   $('eras').onclick=e=>{const b=e.target.closest('.era');if(b) go(b.dataset.v);};
 }
 function go(view,key,push=true){
@@ -377,23 +444,30 @@ function render(){
   const tiles=R.tiles(d,t,E).map(([val,label,col])=>{const s=val==null?'—':typeof val==='object'?(val.part!==undefined?totStr(val):val.v):val;return `<div class="tile"><b${col?` style="color:var(${col})"`:''}>${s}</b><span>${label}</span></div>`;}).join('');
   const accT={high:'精度：高',mid:'精度：中',low:'精度：低'}[d.acc];
   const wiki=n=>'https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(n.replace(/（.*?）/g,'').split('/')[0].trim());
-  $('side').innerHTML=`
+  $('summary').innerHTML=`
     <div class="yhero">
       <div><span class="badge${sp?' sp':''}">${R.badge(d)}</span></div>
       <div class="ynum${sp?' sp':''}">${esc(keyLabel(e,k))}</div>
       <div class="yera">${esc(d.era)}</div>
       <p class="yctx">${esc(d.ctx)}</p>
     </div>
-    <div><div class="tiles">${tiles}</div>${delta}</div>
-    <div><h3 class="sh">代表艦・出来事</h3><ul class="ships">${d.notable.map(n=>`<li><a href="${wiki(n.n)}" target="_blank" rel="noopener">${esc(n.n)}</a><span>${esc(n.d)}</span></li>`).join('')}</ul></div>
-    <div><h3 class="sh">注記</h3><span class="acc ${d.acc}">${accT}</span><p class="notes">${esc(d.notes)}</p></div>
-    <div><h3 class="sh">出典</h3>${srcHtml(d.src||[])}</div>`;
+    <div><div class="tiles">${tiles}</div>${delta}</div>`;
+  // details: always open on tablet/PC; on phones the reader opens what they need (state kept while stepping through dates)
+  const det=$('details'),openState={};
+  det.querySelectorAll('details').forEach(x=>openState[x.dataset.s]=x.open);
+  const isOpen=s=>!narrowScreen()||(s in openState?openState[s]:s==='ships');
+  const sec=(id,title,body,cls='')=>`<details class="dsec ${cls}" data-s="${id}"${isOpen(id)?' open':''}><summary><h3 class="sh">${title}</h3></summary>${body}</details>`;
+  det.innerHTML=
+    sec('ships','代表艦・出来事',`<ul class="ships">${d.notable.map(n=>`<li><a href="${wiki(n.n)}" target="_blank" rel="noopener">${esc(n.n)}</a><span>${esc(n.d)}</span></li>`).join('')}</ul>`,'ships-sec')+
+    sec('notes','注記',`<span class="acc ${d.acc}">${accT}</span><p class="notes">${esc(d.notes)}</p>`)+
+    sec('src',`出典（${(d.src||[]).length}）`,srcHtml(d.src||[]));
   renderTrend();
 }
 
 /* ═════════ CANVAS ═════════ */
 function setup(cv){
-  const dpr=window.devicePixelRatio||1,W=cv.parentElement.clientWidth||800,H=+cv.getAttribute('height');
+  // chart height follows the screen: shorter on phones, taller on wide screens
+  const dpr=window.devicePixelRatio||1,W=cv.parentElement.clientWidth||800,base=+(cv.dataset.h||(cv.dataset.h=cv.getAttribute('height'))),H=Math.round(base*(W<560?.85:W>1100?1.1:1));
   cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';
   const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);return {ctx,W,H};
 }
@@ -541,7 +615,12 @@ function wire(cv,tip,getList,html,onPick){
   const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
   cv.addEventListener('pointermove',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(q) showTip(tip,cv,q.x,q.y,html(q));else tip.hidden=true;});
   cv.addEventListener('pointerleave',()=>tip.hidden=true);
-  cv.addEventListener('click',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(q&&onPick) onPick(q);});
+  // a tap on touch screens shows the value first; a second tap on the same point picks it
+  let last=null;
+  cv.addEventListener('click',e=>{const [x,y]=pos(e),q=nearest(getList(),x,y,40);if(!q){tip.hidden=true;last=null;return;}
+    const touch=e.pointerType==='touch'||matchMedia('(hover:none)').matches;
+    if(touch&&(!onPick||last!==q)){showTip(tip,cv,q.x,q.y,html(q));last=q;return;}
+    if(onPick) onPick(q);});
 }
 function initInteraction(){
   wire($('trendCv'),$('trendTip'),()=>trendPts,q=>{const e=state.view;return `<b>${esc(keyLabel(e,q.k))}</b> <span>${esc(ERA[e].points[q.k].era)}</span><br>総数 <b>${totStr(q.t)}</b>隻 <span>／ ${RULES[e].subLabel} ${fmtN(q.sub)}</span>`;},q=>select(q.k));
@@ -551,7 +630,8 @@ function initInteraction(){
   $('prevBtn').onclick=()=>step(-1);$('nextBtn').onclick=()=>step(1);
   document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select'))return;if(e.key==='ArrowLeft'){step(-1);e.preventDefault();}if(e.key==='ArrowRight'){step(1);e.preventDefault();}});
 }
-const redraw=()=>{if(ERA[state.view]) renderTrend();else if(state.view==='all'){renderOverview();renderPersonnel();}};
+let lastNarrow=null;
+const redraw=()=>{const n=narrowScreen();if(ERA[state.view]&&n!==lastNarrow&&lastNarrow!==null){lastNarrow=n;render();return;}lastNarrow=n;if(ERA[state.view]) renderTrend();else if(state.view==='all'){renderOverview();renderPersonnel();}};
 
 /* ═════════ BOOT ═════════ */
 function boot(data){
